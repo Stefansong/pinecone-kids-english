@@ -1,0 +1,3128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>幼儿英语口语300句 - 互动学习</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* 移动端优化 */
+        @media (max-width: 768px) {
+            body {
+                font-size: 14px;
+            }
+            .container {
+                padding: 0.5rem;
+            }
+        }
+        
+        /* 卡片动画和交互 */
+        .phrase-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateZ(0);
+            will-change: transform, box-shadow;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .phrase-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s;
+        }
+        
+        .phrase-card:hover::before {
+            left: 100%;
+        }
+        
+        .phrase-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .phrase-card:active {
+            transform: translateY(-4px) scale(1.01);
+            transition: all 0.1s ease;
+        }
+        
+        /* 主导航按钮样式 */
+        .main-nav-button {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            color: #475569;
+            border: 3px solid #cbd5e1;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            min-width: 140px;
+            min-height: 60px;
+        }
+        
+        .main-nav-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+            transition: left 0.6s;
+        }
+        
+        .main-nav-button:hover::before {
+            left: 100%;
+        }
+        
+        .main-nav-button:hover:not(.active) {
+            background: linear-gradient(135deg, #e2e8f0, #cbd5e1);
+            border-color: #94a3b8;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+            transform: translateY(-3px) scale(1.02);
+        }
+        
+        .main-nav-button.active {
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        /* 分类浏览按钮 */
+        #category-browse-button.active {
+            background: linear-gradient(135deg, #10b981, #059669);
+            border-color: #047857;
+            box-shadow: 0 15px 40px rgba(16, 185, 129, 0.4);
+        }
+        
+        #category-browse-button:hover:not(.active) {
+            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+            border-color: #6ee7b7;
+        }
+        
+        /* 学习中心按钮 */
+        #learning-hub-button.active {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border-color: #1e40af;
+            box-shadow: 0 15px 40px rgba(59, 130, 246, 0.4);
+        }
+        
+        #learning-hub-button:hover:not(.active) {
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+            border-color: #93c5fd;
+        }
+        
+        /* 抽认卡按钮 */
+        #flashcard-mode-button.active {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            border-color: #b45309;
+            box-shadow: 0 15px 40px rgba(245, 158, 11, 0.4);
+        }
+        
+        #flashcard-mode-button:hover:not(.active) {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border-color: #fbbf24;
+        }
+        
+        /* 分类浏览按钮发光边框 */
+        #category-browse-button.active::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #10b981, #34d399, #6ee7b7, #a7f3d0);
+            border-radius: inherit;
+            z-index: -1;
+            animation: borderGlow 3s linear infinite;
+        }
+        
+        /* 学习中心按钮发光边框 */
+        #learning-hub-button.active::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #3b82f6, #60a5fa, #93c5fd, #bfdbfe);
+            border-radius: inherit;
+            z-index: -1;
+            animation: borderGlow 3s linear infinite;
+        }
+        
+        /* 抽认卡按钮发光边框 */
+        #flashcard-mode-button.active::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #f59e0b, #fbbf24, #fcd34d, #fde68a);
+            border-radius: inherit;
+            z-index: -1;
+            animation: borderGlow 3s linear infinite;
+        }
+        
+        @keyframes borderGlow {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+        
+        /* 主导航按钮激活状态脉冲动画 */
+        .main-nav-button.active {
+            animation: activePulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes activePulse {
+            0%, 100% { 
+                box-shadow: 0 15px 40px rgba(59, 130, 246, 0.4);
+            }
+            50% { 
+                box-shadow: 0 20px 50px rgba(59, 130, 246, 0.6);
+            }
+        }
+        
+        /* 为每个按钮定制脉冲颜色 */
+        #category-browse-button.active {
+            animation: categoryPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes categoryPulse {
+            0%, 100% { 
+                box-shadow: 0 15px 40px rgba(16, 185, 129, 0.4);
+            }
+            50% { 
+                box-shadow: 0 20px 50px rgba(16, 185, 129, 0.6);
+            }
+        }
+        
+        #flashcard-mode-button.active {
+            animation: flashcardPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes flashcardPulse {
+            0%, 100% { 
+                box-shadow: 0 15px 40px rgba(245, 158, 11, 0.4);
+            }
+            50% { 
+                box-shadow: 0 20px 50px rgba(245, 158, 11, 0.6);
+            }
+        }
+        
+        /* 移动端主导航按钮优化 */
+        @media (max-width: 768px) {
+            .main-nav-button {
+                min-width: 120px;
+                min-height: 50px;
+                font-size: 0.9rem;
+                padding: 12px 20px !important;
+            }
+            
+            .main-nav-button:active {
+                transform: scale(0.95);
+                transition: transform 0.1s ease;
+            }
+        }
+        
+        /* 次级导航按钮样式 */
+        .nav-button, .sub-nav-button, .action-button {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            transform: translateZ(0);
+        }
+        
+        .nav-button::before, .sub-nav-button::before, .action-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s;
+        }
+        
+        .nav-button:active::before, .sub-nav-button:active::before, .action-button:active::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .nav-button.active {
+            background: linear-gradient(135deg, #0ea5e9, #0284c7);
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.4);
+        }
+        
+        .nav-button {
+            background: linear-gradient(135deg, #bae6fd, #93c5fd);
+            color: #0369a1;
+            border: 2px solid transparent;
+        }
+        
+        .nav-button:hover:not(.active) {
+            background: linear-gradient(135deg, #7dd3fc, #60a5fa);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(125, 211, 252, 0.4);
+        }
+        
+        .action-button {
+            background: linear-gradient(135deg, #14b8a6, #0d9488);
+            color: white;
+            border: 2px solid transparent;
+            box-shadow: 0 4px 15px rgba(20, 184, 166, 0.3);
+        }
+        
+        .action-button:hover {
+            background: linear-gradient(135deg, #0d9488, #0f766e);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(13, 148, 136, 0.4);
+        }
+        
+        .action-button:active {
+            transform: translateY(0);
+        }
+        
+        .sub-nav-button.active {
+            background: linear-gradient(135deg, #0ea5e9, #0284c7);
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.4);
+        }
+        
+        .sub-nav-button {
+            background: linear-gradient(135deg, #bae6fd, #93c5fd);
+            color: #0369a1;
+        }
+        
+        .sub-nav-button:hover:not(.active) {
+            background: linear-gradient(135deg, #7dd3fc, #60a5fa);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(125, 211, 252, 0.4);
+        }
+        
+        /* 闪卡增强动画 */
+        .flashcard {
+            perspective: 1000px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .flashcard:hover {
+            transform: scale(1.05);
+        }
+        
+        .flashcard-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+        
+        .flashcard.flipped .flashcard-inner {
+            transform: rotateY(180deg);
+        }
+        
+        .flashcard-front, .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 3px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .flashcard-front {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+        }
+        
+        .flashcard-back {
+            background: linear-gradient(135deg, #a7f3d0, #6ee7b7);
+            transform: rotateY(180deg);
+        }
+        
+        /* 音频播放动画增强 */
+        .speaker-icon.playing {
+            animation: pulse 1s infinite;
+        }
+        
+        .speaker-icon.playing path {
+            animation: soundwave 0.8s infinite ease-in-out;
+        }
+        
+        @keyframes soundwave {
+            0%, 100% { 
+                transform: scaleY(0.5); 
+                transform-origin: bottom; 
+                opacity: 0.7;
+            }
+            50% { 
+                transform: scaleY(1.2); 
+                transform-origin: bottom; 
+                opacity: 1;
+            }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        /* 进度条动画 */
+        .progress-bar-fill {
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            background: linear-gradient(90deg, #14b8a6, #06b6d4, #3b82f6);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        
+        /* 页面切换动画 */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        .slide-in-right {
+            animation: slideInRight 0.5s ease-out;
+        }
+        
+        .slide-in-left {
+            animation: slideInLeft 0.5s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        /* 移动端触摸反馈 */
+        @media (max-width: 768px) {
+            .phrase-card:active {
+                transform: scale(0.98);
+                transition: transform 0.1s ease;
+            }
+            
+            .nav-button:active, .action-button:active, .sub-nav-button:active {
+                transform: scale(0.95);
+                transition: transform 0.1s ease;
+            }
+            
+            /* 增大触摸目标 */
+            .pronounce-button, .toggle-translation-button, .mark-learned-button {
+                min-height: 44px;
+                min-width: 44px;
+            }
+        }
+        
+        /* 加载动画 */
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f4f6;
+            border-top: 4px solid #14b8a6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* 成功提示动画 */
+        .success-indicator {
+            animation: successPulse 0.6s ease-out;
+        }
+        
+        @keyframes successPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        
+        /* 错误提示动画 */
+        .error-shake {
+            animation: shake 0.5s ease-in-out;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        /* 浮动动画 */
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        /* 渐变背景动画 */
+        .animated-background {
+            background: linear-gradient(-45deg, #fffbeb, #fef3c7, #fde68a, #fed7aa);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* 学习进度指示器 */
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+        
+        .progress-ring-circle {
+            transition: stroke-dasharray 0.5s ease-in-out;
+        }
+        
+        /* 工具提示 */
+        .tooltip {
+            position: relative;
+        }
+        
+        .tooltip::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .tooltip:hover::after {
+            opacity: 1;
+        }
+        
+        /* 响应式字体大小 */
+        @media (max-width: 640px) {
+            .text-3xl { font-size: 1.5rem; }
+            .text-4xl { font-size: 1.875rem; }
+            .text-xl { font-size: 1.125rem; }
+            .text-2xl { font-size: 1.25rem; }
+        }
+        
+        /* 学习模式选择样式 */
+        .learning-mode-option input:checked + div {
+            border-color: #3b82f6 !important;
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe) !important;
+        }
+        
+        /* 目标进度条动画 */
+        .goal-progress-bar {
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* 洞察卡片悬停效果 */
+        .insight-card {
+            transition: all 0.3s ease;
+        }
+        
+        .insight-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* 智能规划对话框动画 */
+        .smart-plan-dialog {
+            animation: fadeInScale 0.3s ease-out;
+        }
+        
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        /* 目标完成庆祝动画 */
+        .goal-celebration {
+            animation: goalCelebration 0.6s ease-out;
+        }
+        
+        @keyframes goalCelebration {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        /* 学习统计卡片 */
+        .stats-card {
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+        
+        .stats-card:hover {
+            background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+<body class="min-h-screen text-stone-700 p-4 sm:p-6 md:p-8">
+    <div class="container mx-auto max-w-5xl">
+        <header class="text-center mb-8 fade-in">
+            <h1 class="text-3xl sm:text-4xl font-bold text-sky-600 float-animation">
+                🌲 松果幼儿英语口语300句
+            </h1>
+            <p class="text-lg text-stone-600 mt-2">✨ 互动学习应用 ✨</p>
+            <div class="mt-4 flex justify-center">
+                <div class="bg-gradient-to-r from-sky-400 to-teal-400 h-1 w-24 rounded-full"></div>
+            </div>
+        </header>
+
+                <nav class="mb-8 slide-in-right">
+            <div class="flex flex-wrap justify-center gap-3 sm:gap-4 mb-6 p-4 bg-gradient-to-r from-white/90 to-blue-50/90 backdrop-blur-lg rounded-3xl shadow-2xl border border-white/40">
+                <button id="category-browse-button" class="main-nav-button py-4 px-8 rounded-2xl text-base sm:text-lg font-semibold active tooltip transform hover:scale-105 transition-all duration-300" data-tooltip="按主题浏览学习">
+                    <span class="inline-block transform transition-transform duration-300 hover:rotate-12">📚</span> 分类浏览
+                </button>
+                <button id="learning-hub-button" class="main-nav-button py-4 px-8 rounded-2xl text-base sm:text-lg font-semibold tooltip transform hover:scale-105 transition-all duration-300" data-tooltip="制定学习计划">
+                    <span class="inline-block transform transition-transform duration-300 hover:scale-125">🎯</span> 学习中心
+                </button>
+                <button id="flashcard-mode-button" class="main-nav-button py-4 px-8 rounded-2xl text-base sm:text-lg font-semibold tooltip transform hover:scale-105 transition-all duration-300" data-tooltip="卡片式学习">
+                    <span class="inline-block transform transition-transform duration-300 hover:rotate-180">🃏</span> 抽认卡模式
+                </button>
+            </div>
+            <div id="category-buttons" class="flex flex-wrap justify-center gap-2 sm:gap-3">
+                </div>
+        </nav>
+
+        <main id="content-area">
+            <p id="category-intro" class="text-center text-stone-600 mb-6 text-lg"></p>
+
+            <div id="phrases-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+            </div>
+
+            <div id="flashcard-container" class="hidden">
+                <div class="flex flex-wrap justify-center gap-2 sm:gap-3 mb-6 p-4 bg-white rounded-lg shadow-md">
+                    <span class="text-stone-700 text-sm sm:text-base font-medium">卡片来源:</span>
+                    <label class="inline-flex items-center">
+                        <input type="radio" name="flashcard-source" value="all" class="form-radio text-teal-500" checked>
+                        <span class="ml-2 text-stone-600">所有短语</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="radio" name="flashcard-source" value="category" class="form-radio text-teal-500">
+                        <span class="ml-2 text-stone-600">当前分类</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="radio" name="flashcard-source" value="unlearned" class="form-radio text-teal-500">
+                        <span class="ml-2 text-stone-600">未掌握短语</span>
+                    </label>
+                    <button id="shuffle-flashcards-button" class="action-button py-1 px-3 rounded-md text-sm">🔀 重新洗牌</button>
+                </div>
+
+                <div id="flashcard-display-area">
+                    </div>
+                
+                <div class="flex flex-col items-center mt-6 gap-4">
+                    <p id="flashcard-counter" class="text-stone-600 text-base sm:text-lg"></p>
+                    <div id="flashcard-nav-buttons" class="flex justify-between gap-4 w-full max-w-md">
+                        <button id="prev-flashcard" class="action-button py-2 px-4 rounded-lg text-sm sm:text-base flex-1">上一张</button>
+                        <button id="mark-learned-flashcard-button" class="action-button py-2 px-4 rounded-lg text-sm sm:text-base bg-sky-600 hover:bg-sky-700 flex-1">标记已学</button>
+                        <button id="next-flashcard" class="action-button py-2 px-4 rounded-lg text-sm sm:text-base flex-1">下一张</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="learning-hub-container" class="hidden p-4 sm:p-6 bg-white rounded-lg shadow-md">
+                <div class="flex flex-wrap justify-center gap-2 sm:gap-3 mb-6">
+                    <button id="learning-plan-tab-button" class="sub-nav-button py-2 px-4 rounded-lg text-sm sm:text-base font-medium active tooltip" data-tooltip="智能学习计划">📚 学习计划</button>
+                    <button id="review-plan-tab-button" class="sub-nav-button py-2 px-4 rounded-lg text-sm sm:text-base font-medium tooltip" data-tooltip="科学复习安排">🔄 复习计划</button>
+                    <button id="my-progress-tab-button" class="sub-nav-button py-2 px-4 rounded-lg text-sm sm:text-base font-medium tooltip" data-tooltip="详细学习统计">📊 我的进度</button>
+                    <button id="learning-goals-tab-button" class="sub-nav-button py-2 px-4 rounded-lg text-sm sm:text-base font-medium tooltip" data-tooltip="设定学习目标">🎯 学习目标</button>
+                    <button id="learning-insights-tab-button" class="sub-nav-button py-2 px-4 rounded-lg text-sm sm:text-base font-medium tooltip" data-tooltip="学习洞察分析">💡 学习洞察</button>
+                </div>
+
+                <div id="learning-plan-content" class="learning-hub-content">
+                    <h2 class="text-xl sm:text-2xl font-bold text-sky-600 mb-4 text-center">📚 智能学习计划</h2>
+                    <p class="text-center text-stone-600 mb-6 text-base">基于您的学习能力和进度，为您量身定制的学习计划</p>
+                    
+                    <!-- 学习模式选择 -->
+                    <div class="bg-gradient-to-r from-blue-50 to-teal-50 p-4 rounded-lg mb-6">
+                        <h3 class="text-lg font-semibold text-teal-700 mb-3">🎯 学习模式</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <label class="learning-mode-option cursor-pointer">
+                                <input type="radio" name="learning-mode" value="beginner" class="sr-only">
+                                <div class="p-3 border-2 border-stone-200 rounded-lg text-center hover:border-blue-400 transition-colors">
+                                    <div class="text-2xl mb-1">🐣</div>
+                                    <div class="font-medium">初学者模式</div>
+                                    <div class="text-xs text-stone-600">每天2-3个短语</div>
+                                </div>
+                            </label>
+                            <label class="learning-mode-option cursor-pointer">
+                                <input type="radio" name="learning-mode" value="normal" class="sr-only" checked>
+                                <div class="p-3 border-2 border-blue-400 bg-blue-50 rounded-lg text-center transition-colors">
+                                    <div class="text-2xl mb-1">🌱</div>
+                                    <div class="font-medium">标准模式</div>
+                                    <div class="text-xs text-stone-600">每天3-5个短语</div>
+                                </div>
+                            </label>
+                            <label class="learning-mode-option cursor-pointer">
+                                <input type="radio" name="learning-mode" value="intensive" class="sr-only">
+                                <div class="p-3 border-2 border-stone-200 rounded-lg text-center hover:border-blue-400 transition-colors">
+                                    <div class="text-2xl mb-1">🚀</div>
+                                    <div class="font-medium">强化模式</div>
+                                    <div class="text-xs text-stone-600">每天5-8个短语</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- 今日学习任务 -->
+                    <div class="bg-gradient-to-r from-green-50 to-emerald-50 p-4 rounded-lg mb-6">
+                        <h3 class="text-lg font-semibold text-emerald-700 mb-3">📅 今日学习任务</h3>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+                            <div class="bg-white p-3 rounded-lg">
+                                <div class="text-2xl font-bold text-blue-600" id="today-target">5</div>
+                                <div class="text-xs text-stone-600">目标短语</div>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg">
+                                <div class="text-2xl font-bold text-green-600" id="today-completed">0</div>
+                                <div class="text-xs text-stone-600">已完成</div>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg">
+                                <div class="text-2xl font-bold text-orange-600" id="today-review">2</div>
+                                <div class="text-xs text-stone-600">需复习</div>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg">
+                                <div class="text-2xl font-bold text-purple-600" id="study-streak">0</div>
+                                <div class="text-xs text-stone-600">连续天数</div>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <div class="flex justify-between text-sm text-stone-600 mb-1">
+                                <span>今日进度</span>
+                                <span id="today-progress-text">0%</span>
+                            </div>
+                            <div class="w-full bg-stone-200 rounded-full h-3">
+                                <div id="today-progress-bar" class="bg-gradient-to-r from-green-400 to-emerald-500 h-full rounded-full transition-all duration-500" style="width: 0%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 学习计划控制 -->
+                    <div class="flex flex-col sm:flex-row justify-center items-center gap-4 mb-6">
+                        <div class="flex items-center gap-2">
+                            <label for="phrases-per-day-input" class="text-stone-600 text-sm sm:text-base">自定义每日句数:</label>
+                            <input type="number" id="phrases-per-day-input" value="3" min="1" max="15" class="w-20 p-2 border border-stone-300 rounded-md text-center text-sm sm:text-base">
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <button id="prev-day-button" class="action-button py-2 px-4 rounded-lg text-sm sm:text-base">⬅️ 上一天</button>
+                            <span id="current-day-display" class="text-lg sm:text-xl font-semibold text-teal-700"></span>
+                            <button id="next-day-button" class="action-button py-2 px-4 rounded-lg text-sm sm:text-base">下一天 ➡️</button>
+                        </div>
+                        <button id="auto-plan-button" class="action-button py-2 px-4 rounded-lg text-sm sm:text-base bg-purple-600 hover:bg-purple-700">🤖 智能规划</button>
+                    </div>
+                    
+                    <div id="daily-phrases-display" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                    </div>
+                </div>
+
+                <div id="review-plan-content" class="learning-hub-content hidden">
+                    <h2 class="text-xl sm:text-2xl font-bold text-sky-600 mb-4 text-center">我的复习计划</h2>
+                    <p class="text-center text-stone-600 mb-6 text-base">这里会显示您尚未掌握的短语，帮助您温故知新。</p>
+                    <div id="review-phrases-display" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                        </div>
+                    <div class="flex justify-center mt-6">
+                        <button id="refresh-review-button" class="action-button py-2 px-4 rounded-lg text-sm sm:text-base">刷新复习短语</button>
+                    </div>
+                </div>
+
+                <div id="my-progress-content" class="learning-hub-content hidden">
+                    <h2 class="text-xl sm:text-2xl font-bold text-sky-600 mb-4 text-center">📊 我的学习进度</h2>
+                    <p class="text-center text-stone-600 mb-6 text-base">查看您的整体学习进展和详细统计。</p>
+                    <div class="flex flex-col items-center mb-6">
+                        <p class="text-lg font-semibold text-stone-700 mb-2">总短语数: <span id="total-phrases-count"></span> 句</p>
+                        <p class="text-lg font-semibold text-stone-700 mb-2">已学短语数: <span id="learned-phrases-count"></span> 句</p>
+                        <p class="text-2xl font-bold text-teal-600 mb-4"><span id="progress-percentage"></span>%</p>
+                        <div class="w-full max-w-md bg-stone-200 rounded-full h-4">
+                            <div id="progress-bar-fill" class="bg-teal-500 h-full rounded-full progress-bar-fill" style="width: 0%;"></div>
+                        </div>
+                    </div>
+                    <h3 class="text-lg sm:text-xl font-semibold text-sky-600 mb-3 text-center">各分类进度</h3>
+                    <div id="category-progress-display" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    </div>
+                </div>
+
+                <div id="learning-goals-content" class="learning-hub-content hidden">
+                    <h2 class="text-xl sm:text-2xl font-bold text-sky-600 mb-4 text-center">🎯 学习目标</h2>
+                    <p class="text-center text-stone-600 mb-6 text-base">设定和追踪您的学习目标，保持学习动力。</p>
+                    
+                    <!-- 当前目标 -->
+                    <div class="bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-lg mb-6">
+                        <h3 class="text-lg font-semibold text-purple-700 mb-3">🎯 当前目标</h3>
+                        <div id="current-goals-display">
+                            <!-- 动态生成目标内容 -->
+                        </div>
+                    </div>
+                    
+                    <!-- 设定新目标 -->
+                    <div class="bg-gradient-to-r from-blue-50 to-cyan-50 p-4 rounded-lg mb-6">
+                        <h3 class="text-lg font-semibold text-blue-700 mb-3">➕ 设定新目标</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-stone-700 mb-2">目标类型</label>
+                                <select id="goal-type-select" class="w-full p-2 border border-stone-300 rounded-md">
+                                    <option value="daily">每日学习</option>
+                                    <option value="weekly">每周学习</option>
+                                    <option value="total">总学习量</option>
+                                    <option value="streak">连续学习</option>
+                                    <option value="category">分类完成</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-stone-700 mb-2">目标数值</label>
+                                <input type="number" id="goal-value-input" class="w-full p-2 border border-stone-300 rounded-md" min="1" value="10">
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <label class="block text-sm font-medium text-stone-700 mb-2">目标描述</label>
+                            <input type="text" id="goal-description-input" class="w-full p-2 border border-stone-300 rounded-md" placeholder="例如：每天学习5个新短语">
+                        </div>
+                        <button id="add-goal-button" class="mt-4 action-button py-2 px-4 rounded-lg">🎯 添加目标</button>
+                    </div>
+                    
+                    <!-- 目标历史 -->
+                    <div class="bg-gradient-to-r from-green-50 to-emerald-50 p-4 rounded-lg">
+                        <h3 class="text-lg font-semibold text-green-700 mb-3">🏆 已完成目标</h3>
+                        <div id="completed-goals-display">
+                            <!-- 动态生成已完成目标 -->
+                        </div>
+                    </div>
+                </div>
+
+                <div id="learning-insights-content" class="learning-hub-content hidden">
+                    <h2 class="text-xl sm:text-2xl font-bold text-sky-600 mb-4 text-center">💡 学习洞察</h2>
+                    <p class="text-center text-stone-600 mb-6 text-base">基于您的学习数据，为您提供个性化的学习建议。</p>
+                    
+                    <!-- 学习模式分析 -->
+                    <div class="bg-gradient-to-r from-indigo-50 to-purple-50 p-4 rounded-lg mb-6">
+                        <h3 class="text-lg font-semibold text-indigo-700 mb-3">📈 学习模式分析</h3>
+                        <div id="learning-patterns-display">
+                            <!-- 动态生成学习模式分析 -->
+                        </div>
+                    </div>
+                    
+                    <!-- 个性化建议 -->
+                    <div class="bg-gradient-to-r from-orange-50 to-red-50 p-4 rounded-lg mb-6">
+                        <h3 class="text-lg font-semibold text-orange-700 mb-3">💡 个性化建议</h3>
+                        <div id="personalized-suggestions-display">
+                            <!-- 动态生成个性化建议 -->
+                        </div>
+                    </div>
+                    
+                    <!-- 学习效率分析 -->
+                    <div class="bg-gradient-to-r from-teal-50 to-green-50 p-4 rounded-lg mb-6">
+                        <h3 class="text-lg font-semibold text-teal-700 mb-3">⚡ 学习效率分析</h3>
+                        <div id="efficiency-analysis-display">
+                            <!-- 动态生成效率分析 -->
+                        </div>
+                    </div>
+                    
+                    <!-- 预测和规划 -->
+                    <div class="bg-gradient-to-r from-pink-50 to-rose-50 p-4 rounded-lg">
+                        <h3 class="text-lg font-semibold text-pink-700 mb-3">🔮 学习预测</h3>
+                        <div id="learning-predictions-display">
+                            <!-- 动态生成学习预测 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="text-center mt-12 py-8 border-t border-gradient-to-r from-sky-200 to-teal-200 bg-white/30 backdrop-blur-sm rounded-t-2xl">
+            <div class="mb-4">
+                <p class="text-stone-600 text-sm mb-2">💡 使用小贴士</p>
+                <div class="flex flex-wrap justify-center gap-4 text-xs text-stone-500">
+                    <span>📱 移动端：左右滑动切换卡片</span>
+                    <span>⌨️ 电脑端：方向键导航，空格翻转</span>
+                    <span>🔊 点击喇叭图标听发音</span>
+                </div>
+            </div>
+            <p class="text-stone-500 text-sm">&copy; 2024 松果幼儿英语学习助手 ✨</p>
+        </footer>
+    </div>
+
+    <script>
+        const phrasesData = [
+            {
+                category: "问候及祝福",
+                introduction: "学习日常问候和表达祝福的基本方式，让宝贝礼貌待人。",
+                phrases: [
+                    { en: "Hello!", zh: "你好!" }, { en: "Hi!", zh: "嗨!" },
+                    { en: "Good morning!", zh: "早上好!" }, { en: "Good afternoon!", zh: "下午好!" },
+                    { en: "Good evening!", zh: "晚上好!" }, { en: "Good night!", zh: "晚安!" },
+                    { en: "Goodbye!", zh: "再见!" }, { en: "See you!", zh: "再见!" },
+                    { en: "See you later!", zh: "待会儿见!" }, { en: "See you tomorrow!", zh: "明天见!" },
+                    { en: "See you next time.", zh: "下次见。" }, { en: "Thank you.", zh: "谢谢。" },
+                    { en: "You're welcome.", zh: "不客气。" }, { en: "Please.", zh: "请。" },
+                    { en: "Excuse me.", zh: "打扰一下/请原谅。" }, { en: "I'm sorry.", zh: "对不起。" },
+                    { en: "Never mind.", zh: "没关系。" }, { en: "How are you?", zh: "你好吗?" },
+                    { en: "I'm fine, thank you.", zh: "我很好，谢谢你。" }, { en: "Are you OK?", zh: "你还好吗?" },
+                    { en: "Yes, I am OK.", zh: "我挺好的。" }, { en: "Nice to meet you.", zh: "见到你很高兴。" },
+                    { en: "Nice to see you again.", zh: "很高兴再次见到你。" }, { en: "Hello, everyone!", zh: "大家好!" },
+                    { en: "Hi, friend!", zh: "嗨，朋友!" }, { en: "Have a good day!", zh: "祝你今天愉快!" },
+                    { en: "Have fun!", zh: "玩得开心!" }, { en: "Happy birthday!", zh: "生日快乐!" },
+                    { en: "Merry Christmas!", zh: "圣诞快乐!" }, { en: "Happy New Year!", zh: "新年快乐!" }
+                ]
+            },
+            {
+                category: "日常生活",
+                introduction: "掌握与日常生活相关的常用表达，例如洗漱、穿衣、如厕等。",
+                phrases: [
+                    { en: "Wake up!", zh: "起床了!" }, { en: "Get up!", zh: "起来!" },
+                    { en: "Brush your teeth.", zh: "刷牙。" }, { en: "Wash your face.", zh: "洗脸。" },
+                    { en: "Comb your hair.", zh: "梳头。" }, { en: "Put on your clothes!", zh: "穿上衣服。" },
+                    { en: "Take off your shoes.", zh: "脱鞋。" }, { en: "Put on your shoes.", zh: "穿鞋。" },
+                    { en: "Let's go!", zh: "我们走吧!" }, { en: "Come on!", zh: "快点!" },
+                    { en: "I want to go to the toilet.", zh: "我想上厕所。" }, { en: "Are you ready?", zh: "你准备好了吗?" },
+                    { en: "I'm ready.", zh: "我准备好了。" }, { en: "Where are you?", zh: "你在哪儿?" },
+                    { en: "There you are!", zh: "你在这儿。" }, { en: "Don't cry!", zh: "别哭!" },
+                    { en: "Be happy!", zh: "开心点!" }, { en: "Be quiet!", zh: "安静!" },
+                    { en: "Listen carefully.", zh: "仔细听。" }, { en: "Look at me.", zh: "看着我。" },
+                    { en: "Wait a minute.", zh: "等一下。" }, { en: "Come here.", zh: "来这里。" },
+                    { en: "Go there.", zh: "去那儿。" }, { en: "Sit down, please.", zh: "请坐下。" },
+                    { en: "Stand up, please.", zh: "请站起来。" }, { en: "Hands up.", zh: "举起手来。" },
+                    { en: "Hands down.", zh: "放下手。" }, { en: "Close your eyes.", zh: "闭上眼睛。" },
+                    { en: "Open your eyes.", zh: "睁开眼睛。" }, { en: "Show me your hands.", zh: "给我看看你的手。" },
+                    { en: "Wash your hands.", zh: "洗手。" }, { en: "Clean up!", zh: "收拾好!" },
+                    { en: "It's time to sleep.", zh: "该睡觉了。" }, { en: "Sweet dreams.", zh: "做个好梦。" },
+                    { en: "Let's go home.", zh: "我们回家吧。" }, { en: "What's wrong?", zh: "怎么了?" },
+                    { en: "I don't know.", zh: "我不知道。" }, { en: "I understand.", zh: "我明白了。" }
+                ]
+            },
+            {
+                category: "进餐相关",
+                introduction: "学习在吃饭时会用到的表达，如表达饥饿、点餐、表示吃饱等。",
+                phrases: [
+                    { en: "I am hungry.", zh: "我饿了。" }, { en: "I am thirsty.", zh: "我渴了。" },
+                    { en: "Are you hungry?", zh: "你饿吗?" }, { en: "Are you thirsty?", zh: "你渴吗?" },
+                    { en: "It's time for breakfast.", zh: "该吃早饭了。" }, { en: "It's time for lunch.", zh: "该吃午饭了。" },
+                    { en: "It's time for dinner.", zh: "该吃晚饭了。" }, { en: "What's for breakfast/lunch/dinner?", zh: "早饭/午饭/晚饭吃什么?" },
+                    { en: "I want more rice/vegetable.", zh: "我还想要米饭/菜。" }, { en: "I want some water/milk/juice.", zh: "我想要些水/牛奶/果汁。" },
+                    { en: "I am full.", zh: "我吃饱了。" }, { en: "I don't like it.", zh: "我不喜欢它。" },
+                    { en: "It's delicious!", zh: "真好吃!" }, { en: "Yummy!", zh: "好吃!" },
+                    { en: "Have some water/tea/milk.", zh: "喝一些水/茶/牛奶。" }, { en: "Take a bite.", zh: "咬一口。" },
+                    { en: "Eat slowly.", zh: "慢慢吃。" }, { en: "Chew carefully.", zh: "小心咀嚼。" },
+                    { en: "I have done my hands.", zh: "我洗过手了。" }, { en: "There is no tissue paper.", zh: "没有餐巾纸了。" },
+                    { en: "Can I have a napkin?", zh: "我可以要一张餐巾纸吗?" }, { en: "I spilled my soup.", zh: "我把汤撒了。" },
+                    { en: "Clean up the mess.", zh: "把脏乱收拾干净。" }, { en: "Help yourself.", zh: "别客气。" },
+                    { en: "Thank you for the food.", zh: "谢谢你的食物。" }, { en: "Finish your food.", zh: "吃完你的食物。" }
+                ]
+            },
+            {
+                category: "赞美及鼓励",
+                introduction: "学会用积极的语言赞美和鼓励他人，培养宝贝的正面沟通能力。",
+                phrases: [
+                    { en: "Very good!", zh: "非常好!" }, { en: "Good job!", zh: "干得不错!" },
+                    { en: "Well done!", zh: "干得好!" }, { en: "Excellent!", zh: "太棒了!" },
+                    { en: "Wonderful!", zh: "精彩!" }, { en: "Amazing!", zh: "令人惊叹!" },
+                    { en: "You are smart!", zh: "你真聪明!" }, { en: "You are clever!", zh: "你真机灵!" },
+                    { en: "You are so kind!", zh: "你真善良!" }, { en: "You are so helpful!", zh: "你真乐于助人!" },
+                    { en: "Good idea.", zh: "好主意。" }, { en: "That's right!", zh: "对了!" },
+                    { en: "Yes, you are right.", zh: "是的, 你说得对。" }, { en: "I agree with you.", zh: "我同意你说的话。" },
+                    { en: "How beautiful!", zh: "多美啊!" }, { en: "How cute!", zh: "多可爱呀!" },
+                    { en: "How funny!", zh: "多有趣呀!" }, { en: "I am proud of you.", zh: "我为你骄傲。" },
+                    { en: "Keep trying!", zh: "继续努力!" }, { en: "Don't give up!", zh: "不要放弃!" },
+                    { en: "You can do it!", zh: "你能做到!" }, { en: "I believe in you.", zh: "我相信你。" },
+                    { en: "You are the best!", zh: "你是最棒的!" }, { en: "I am the first!", zh: "我是第一名!" },
+                    { en: "You win!", zh: "你赢了!" }, { en: "You lose.", zh: "你输了。" }
+                ]
+            },
+            {
+                category: "游戏及指令",
+                introduction: "学习在玩游戏和日常互动中常用的指令和表达。",
+                phrases: [
+                    { en: "Let's begin/start.", zh: "我们开始。" }, { en: "Are you ready?", zh: "准备好了吗?" },
+                    { en: "One, two, three, go!", zh: "一、二、三, 开始!" }, { en: "Who is the winner?", zh: "谁赢了?" },
+                    { en: "Who wants to have a try?", zh: "谁愿意来试一试?" }, { en: "Look out!", zh: "小心!" },
+                    { en: "Be careful!", zh: "小心!" }, { en: "It's your turn.", zh: "轮到你了。" },
+                    { en: "My turn!", zh: "轮到我了!" }, { en: "Your turn!", zh: "轮到你了!" },
+                    { en: "Please follow me.", zh: "请跟我学。" }, { en: "Watch me!", zh: "看着我!" },
+                    { en: "Really?", zh: "真的吗?" }, { en: "Are you sure?", zh: "你肯定吗?" },
+                    { en: "Louder, please.", zh: "请大声点。" }, { en: "Try again!", zh: "再试一次!" },
+                    { en: "Hurry up!", zh: "赶快!" }, { en: "Take it easy!", zh: "慢慢来!" },
+                    { en: "Let's jump.", zh: "我们一起跳。" }, { en: "Clap your hands.", zh: "拍手。" },
+                    { en: "Stamp your feet.", zh: "跺脚。" }, { en: "Shake your body.", zh: "摇摇身体。" },
+                    { en: "Stretch your arms.", zh: "伸伸胳膊。" }, { en: "Shake your head.", zh: "摇摇头。" },
+                    { en: "Nod your head.", zh: "点点头。" }, { en: "Wiggle your fingers.", zh: "动动手指。" },
+                    { en: "Let's sing a song.", zh: "我们来唱首歌。" }, { en: "Let's dance.", zh: "我们来跳舞。" },
+                    { en: "Let's play a game.", zh: "我们玩游戏吧。" }, { en: "Can you sing/dance/jump?", zh: "你可以唱歌/跳舞/蹦吗?" },
+                    { en: "Show me your nose/hands/feet.", zh: "给我看看你的鼻子/手/脚。" }, { en: "Point to the door.", zh: "指向门。" },
+                    { en: "Touch your stomach.", zh: "摸摸你的肚子。" }, { en: "Turn around.", zh: "转个圈。" },
+                    { en: "Run fast!", zh: "快跑!" }, { en: "Walk slowly.", zh: "慢慢走。" },
+                    { en: "Stop!", zh: "停!" }, { en: "Go!", zh: "走!" },
+                    { en: "Line up, please.", zh: "请排队。" }, { en: "Make a circle.", zh: "围成一个圈。" },
+                    { en: "Stand in a row.", zh: "站成一排。" }, { en: "Stand in a circle, hand in hand.", zh: "站成圈, 手拉手。" },
+                    { en: "Make a big circle.", zh: "站成一个大圈。" }, { en: "Make a small circle.", zh: "站成一个小圈。" }
+                ]
+            },
+            {
+                category: "感冒生病",
+                introduction: "学习描述身体不适和生病时的常用语，以及表达关心。",
+                phrases: [
+                    { en: "I feel sick.", zh: "我感觉不舒服。" }, { en: "I was sick yesterday.", zh: "我昨天病了。" },
+                    { en: "I'm better today.", zh: "我今天好了。" }, { en: "I have a cough.", zh: "我咳嗽。" },
+                    { en: "I have a runny nose.", zh: "我流鼻涕。" }, { en: "I have a sore throat.", zh: "我喉咙痛。" },
+                    { en: "I got a headache.", zh: "我头疼。" }, { en: "I got a cold.", zh: "我感冒了。" },
+                    { en: "I have a fever.", zh: "我发烧了。" }, { en: "You are very very hot.", zh: "你发高烧了。" },
+                    { en: "My teeth got a pain.", zh: "我牙疼。" }, { en: "My stomach hurts.", zh: "我肚子疼。" },
+                    { en: "I feel dizzy.", zh: "我头晕。" }, { en: "I want to throw up.", zh: "我想吐。" },
+                    { en: "Take your medicine.", zh: "吃药。" }, { en: "Drink more water.", zh: "多喝水。" },
+                    { en: "Get some rest.", zh: "多休息。" }, { en: "Are you feeling better?", zh: "你感觉好些了吗?" },
+                    { en: "I miss my Mummy.", zh: "我想我妈妈。" }, { en: "I miss my Daddy.", zh: "我想我爸爸。" },
+                    { en: "Check it out.", zh: "检查一下。" }, { en: "Let's go to the doctor.", zh: "我们去看医生吧。" }
+                ]
+            },
+            {
+                category: "户外活动",
+                introduction: "掌握在户外活动和集体游戏时会用到的指令和交流。",
+                phrases: [
+                    { en: "Let's go out to play.", zh: "我们出去玩吧。" }, { en: "Ready? One, two, go!", zh: "准备好了吗? 出发!" },
+                    { en: "One step forward.", zh: "前进一步。" }, { en: "One step back.", zh: "后退一步。" },
+                    { en: "Turn around and face me, please.", zh: "请转身面向我。" }, { en: "Let's go back to the classroom.", zh: "我们回教室吧。" },
+                    { en: "Let's have a rest.", zh: "我们休息一下。" }, { en: "We want to play hide and seek.", zh: "我们想玩捉迷藏。" },
+                    { en: "Let's play tag.", zh: "我们玩捉人游戏吧。" }, { en: "Let's play on the slide.", zh: "我们去玩滑梯吧。" },
+                    { en: "Let's play on the swing.", zh: "我们去玩秋千吧。" }, { en: "Let's kick the ball.", zh: "我们踢球吧。" },
+                    { en: "Let's throw the ball.", zh: "我们扔球吧。" }, { en: "Let's catch the ball.", zh: "我们接球吧。" },
+                    { en: "Look, a bird!", zh: "看，一只鸟!" }, { en: "Look, a flower!", zh: "看，一朵花!" },
+                    { en: "It's sunny today.", zh: "今天天气晴朗。" }, { en: "It's raining.", zh: "下雨了。" },
+                    { en: "It's windy.", zh: "刮风了。" }, { en: "It's cold.", zh: "很冷。" },
+                    { en: "It's hot.", zh: "很热。" }, { en: "Put on your coat.", zh: "穿上你的外套。" },
+                    { en: "Take off your hat.", zh: "脱掉你的帽子。" }, { en: "Who is not here?", zh: "谁没有到呢?" }
+                ]
+            },
+            {
+                category: "学习与课堂",
+                introduction: "学习在课堂和学习活动中常用的表达，帮助宝贝融入学习环境。",
+                phrases: [
+                    { en: "Open your book.", zh: "打开你的书。" }, { en: "Close your book.", zh: "合上你的书。" },
+                    { en: "Take out your pencil.", zh: "拿出你的铅笔。" }, { en: "Put away your toys.", zh: "收好你的玩具。" },
+                    { en: "Draw a picture.", zh: "画一幅画。" }, { en: "Color it red.", zh: "把它涂成红色。" },
+                    { en: "Write your name.", zh: "写你的名字。" }, { en: "Read after me.", zh: "跟我读。" },
+                    { en: "Repeat after me.", zh: "跟我重复。" }, { en: "Say it again.", zh: "再说一遍。" },
+                    { en: "What's this?", zh: "这是什么?" }, { en: "It's a book.", zh: "这是一本书。" },
+                    { en: "What color is it?", zh: "它是什么颜色?" }, { en: "It's blue.", zh: "它是蓝色的。" },
+                    { en: "How many?", zh: "有多少个?" }, { en: "Count with me.", zh: "和我一起数。" },
+                    { en: "Let's learn.", zh: "我们来学习。" }, { en: "It's learning time.", zh: "到学习时间了。" },
+                    { en: "Do you understand?", zh: "你明白吗?" }, { en: "Yes, I understand.", zh: "是的，我明白了。" },
+                    { en: "No, I don't understand.", zh: "不，我不明白。" }, { en: "Raise your hand.", zh: "举手。" },
+                    { en: "Answer the question.", zh: "回答问题。" }, { en: "Good listening!", zh: "听得真好!" },
+                    { en: "Pay attention.", zh: "请注意。" }, { en: "Share your toys.", zh: "分享你的玩具。" },
+                    { en: "Help your friends.", zh: "帮助你的朋友。" }, { en: "Be polite.", zh: "有礼貌。" }
+                ]
+            },
+            {
+                category: "情绪与感受",
+                introduction: "帮助宝贝表达自己的情绪，并理解他人的感受。",
+                phrases: [
+                    { en: "I am happy.", zh: "我很开心。" }, { en: "I am sad.", zh: "我很伤心。" },
+                    { en: "I am angry.", zh: "我很生气。" }, { en: "I am scared.", zh: "我很害怕。" },
+                    { en: "I am tired.", zh: "我很累。" }, { en: "I am excited!", zh: "我很兴奋!" },
+                    { en: "I am sleepy.", zh: "我很困。" }, { en: "I am bored.", zh: "我很无聊。" },
+                    { en: "Are you happy?", zh: "你开心吗?" }, { en: "Don't be sad.", zh: "别伤心。" },
+                    { en: "Cheer up!", zh: "振作起来!" }, { en: "It's okay.", zh: "没关系。" },
+                    { en: "Give me a hug.", zh: "给我一个拥抱。" }, { en: "Are you okay?", zh: "你还好吗?" },
+                    { en: "I feel good.", zh: "我感觉很好。" }, { en: "I feel bad.", zh: "我感觉不好。" },
+                    { en: "What makes you happy?", zh: "什么让你开心?" }, { en: "What makes you sad?", zh: "什么让你伤心?" }
+                ]
+            },
+            {
+                category: "颜色、数字、形状",
+                introduction: "学习基础的颜色、数字和形状词汇，拓展认知能力。",
+                phrases: [
+                    { en: "What color is this?", zh: "这是什么颜色?" }, { en: "It's red.", zh: "它是红色的。" },
+                    { en: "It's yellow.", zh: "它是黄色的。" }, { en: "It's blue.", zh: "它是蓝色的。" },
+                    { en: "It's green.", zh: "它是绿色的。" }, { en: "It's black.", zh: "它是黑色的。" },
+                    { en: "It's white.", zh: "它是白色的。" }, { en: "It's orange.", zh: "它是橙色的。" },
+                    { en: "It's purple.", zh: "它是紫色的。" }, { en: "It's pink.", zh: "它是粉色的。" },
+                    { en: "How many apples?", zh: "有多少个苹果?" }, { en: "One, two, three.", zh: "一，二，三。" },
+                    { en: "Let's count.", zh: "我们来数数。" }, { en: "What shape is this?", zh: "这是什么形状?" },
+                    { en: "It's a circle.", zh: "它是一个圆形。" }, { en: "It's a square.", zh: "它是一个正方形。" },
+                    { en: "It's a triangle.", zh: "它是一个三角形。" }, { en: "It's a star.", zh: "它是一个星星。" }
+                ]
+            },
+            {
+                category: "动物与大自然",
+                introduction: "认识常见的动物和自然现象，培养对周围世界的好奇心。",
+                phrases: [
+                    { en: "What's that animal?", zh: "那是什么动物?" }, { en: "It's a dog.", zh: "它是一只狗。" },
+                    { en: "It's a cat.", zh: "它是一只猫。" }, { en: "It's a bird.", zh: "它是一只鸟。" },
+                    { en: "It's a fish.", zh: "它是一条鱼。" }, { en: "It's a monkey.", zh: "它是一只猴子。" },
+                    { en: "It's a lion.", zh: "它是一只狮子。" }, { en: "It's an elephant.", zh: "它是一头大象。" },
+                    { en: "What does the dog say?", zh: "狗怎么叫?" }, { en: "Woof, woof!", zh: "汪，汪!" },
+                    { en: "The sun is shining.", zh: "太阳在照耀。" }, { en: "The moon is bright.", zh: "月亮很亮。" },
+                    { en: "Look at the stars.", zh: "看星星。" }, { en: "The sky is blue.", zh: "天空是蓝色的。" },
+                    { en: "The grass is green.", zh: "草是绿色的。" }, { en: "What a beautiful flower!", zh: "多么美丽的花啊!" },
+                    { en: "Don't touch it.", zh: "不要碰它。" }, { en: "Be gentle.", zh: "要温柔。" }
+                ]
+            },
+            {
+                category: "家庭与朋友",
+                introduction: "学习如何称呼家庭成员和朋友，表达对他们的爱和关心。",
+                phrases: [
+                    { en: "This is my mom.", zh: "这是我妈妈。" }, { en: "This is my dad.", zh: "这是我爸爸。" },
+                    { en: "This is my brother.", zh: "这是我哥哥/弟弟。" }, { en: "This is my sister.", zh: "这是我姐姐/妹妹。" },
+                    { en: "I love my family.", zh: "我爱我的家人。" }, { en: "Who is your best friend?", zh: "谁是你最好的朋友?" },
+                    { en: "He is my friend.", zh: "他是我的朋友。" }, { en: "She is my friend.", zh: "她是我的朋友。" },
+                    { en: "Let's play together.", zh: "我们一起玩吧。" }, { en: "Share with your friends.", zh: "和你的朋友分享。" },
+                    { en: "Be nice to your friends.", zh: "对你的朋友友好。" }, { en: "Give me a high five!", zh: "和我击掌!" },
+                    { en: "I miss you.", zh: "我想你。" }, { en: "I love you.", zh: "我爱你。" }
+                ]
+            },
+            {
+                category: "提问与回答",
+                introduction: "学习简单的提问和回答模式，帮助宝贝进行基础对话。",
+                phrases: [
+                    { en: "What's your name?", zh: "你叫什么名字?" }, { en: "My name is...", zh: "我的名字是..." },
+                    { en: "How old are you?", zh: "你几岁了?" }, { en: "I am ... years old.", zh: "我...岁了。" },
+                    { en: "Where are you from?", zh: "你来自哪里?" }, { en: "I'm from China.", zh: "我来自中国。" },
+                    { en: "What are you doing?", zh: "你在做什么?" }, { en: "I'm playing.", zh: "我在玩。" },
+                    { en: "Can I help you?", zh: "我能帮你吗?" }, { en: "Yes, please.", zh: "是的，请。" },
+                    { en: "No, thank you.", zh: "不，谢谢。" }, { en: "What do you want?", zh: "你想要什么?" },
+                    { en: "I want a toy.", zh: "我想要一个玩具。" }, { en: "Do you like it?", zh: "你喜欢它吗?" },
+                    { en: "Yes, I like it.", zh: "是的，我喜欢它。" }, { en: "No, I don't like it.", zh: "不，我不喜欢它。" },
+                    { en: "Is it fun?", zh: "好玩吗?" }, { en: "Yes, it's fun!", zh: "是的，很好玩!" },
+                    { en: "No, it's not fun.", zh: "不，不好玩。" }, { en: "What's the weather like?", zh: "天气怎么样?" },
+                    { en: "It's sunny.", zh: "是晴天。" }, { en: "It's cloudy.", zh: "是阴天。" }
+                ]
+            }
+        ];
+
+        const categoryButtonsContainer = document.getElementById('category-buttons');
+        const phrasesContainer = document.getElementById('phrases-container');
+        const categoryIntro = document.getElementById('category-intro');
+        const flashcardModeButton = document.getElementById('flashcard-mode-button');
+        const flashcardContainer = document.getElementById('flashcard-container');
+        const flashcardDisplayArea = document.getElementById('flashcard-display-area');
+        // Removed flashcardAssessmentButtons, rememberedButton, forgotButton as per simplified design
+        const shuffleFlashcardsButton = document.getElementById('shuffle-flashcards-button');
+        const flashcardSourceRadios = document.querySelectorAll('input[name="flashcard-source"]');
+        const flashcardNavButtons = document.getElementById('flashcard-nav-buttons');
+        const prevFlashcardButton = document.getElementById('prev-flashcard');
+        const nextFlashcardButton = document.getElementById('next-flashcard');
+        const markLearnedFlashcardButton = document.getElementById('mark-learned-flashcard-button'); // Get the new mark learned button
+        const flashcardCounter = document.getElementById('flashcard-counter');
+
+        const categoryBrowseButton = document.getElementById('category-browse-button');
+        const learningHubButton = document.getElementById('learning-hub-button');
+        const learningHubContainer = document.getElementById('learning-hub-container');
+
+        const learningPlanTabButton = document.getElementById('learning-plan-tab-button');
+        const reviewPlanTabButton = document.getElementById('review-plan-tab-button');
+        const myProgressTabButton = document.getElementById('my-progress-tab-button');
+        const learningGoalsTabButton = document.getElementById('learning-goals-tab-button');
+        const learningInsightsTabButton = document.getElementById('learning-insights-tab-button');
+
+        const learningPlanContent = document.getElementById('learning-plan-content');
+        const reviewPlanContent = document.getElementById('review-plan-content');
+        const myProgressContent = document.getElementById('my-progress-content');
+        const learningGoalsContent = document.getElementById('learning-goals-content');
+        const learningInsightsContent = document.getElementById('learning-insights-content');
+
+        const phrasesPerDayInput = document.getElementById('phrases-per-day-input');
+        const prevDayButton = document.getElementById('prev-day-button');
+        const nextDayButton = document.getElementById('next-day-button');
+        const currentDayDisplay = document.getElementById('current-day-display');
+        const dailyPhrasesDisplay = document.getElementById('daily-phrases-display');
+
+        const reviewPhrasesDisplay = document.getElementById('review-phrases-display');
+        const refreshReviewButton = document.getElementById('refresh-review-button');
+
+        const totalPhrasesCount = document.getElementById('total-phrases-count');
+        const learnedPhrasesCount = document.getElementById('learned-phrases-count');
+        const progressPercentage = document.getElementById('progress-percentage');
+        const progressBarFill = document.getElementById('progress-bar-fill');
+        const categoryProgressDisplay = document.getElementById('category-progress-display');
+
+
+        let currentCategoryIndex = 0;
+        let learnedPhrases = {}; // 保持向后兼容
+        let enhancedLearningData = {}; // 新的增强数据结构
+        let currentFlashcardCategoryIndex = 0; // This is only used for category-based flashcard source, not for general flashcard navigation index
+        let currentFlashcardIndex = 0;
+        let currentMode = 'category-browse';
+        let currentLearningHubTab = 'learning-plan';
+        let phrasesPerDay = parseInt(phrasesPerDayInput.value);
+        let currentLearningDay = 0;
+        let currentReviewSetIndex = 0;
+        let unlearnedPhrasesForReview = [];
+        let userStats = {
+            totalLearned: 0,
+            consecutiveDays: 0,
+            lastStudyDate: null,
+            totalStudyTime: 0,
+            averageAccuracy: 0,
+            unlockedAchievements: [],
+            learningMode: 'normal',
+            dailyTarget: 5,
+            todayCompleted: 0,
+            goals: [],
+            learningHistory: []
+        };
+
+        let allFlattenedPhrases = [];
+        let flashcardSet = [];
+
+        // Function Definitions
+        function loadLearnedPhrases() {
+            // 加载旧格式数据（向后兼容）
+            const stored = localStorage.getItem('learnedPhrases');
+            if (stored) {
+                learnedPhrases = JSON.parse(stored);
+            }
+            
+            // 加载增强学习数据
+            const enhancedStored = localStorage.getItem('enhancedLearningData');
+            if (enhancedStored) {
+                enhancedLearningData = JSON.parse(enhancedStored);
+            }
+            
+            // 加载用户统计数据
+            const statsStored = localStorage.getItem('userStats');
+            if (statsStored) {
+                userStats = { ...userStats, ...JSON.parse(statsStored) };
+            }
+            
+            // 迁移旧数据到新格式
+            migrateOldData();
+        }
+
+        function saveLearnedPhrases() {
+            localStorage.setItem('learnedPhrases', JSON.stringify(learnedPhrases));
+            localStorage.setItem('enhancedLearningData', JSON.stringify(enhancedLearningData));
+            localStorage.setItem('userStats', JSON.stringify(userStats));
+            
+            if (currentMode === 'learning-hub' && currentLearningHubTab === 'my-progress') {
+                updateMyProgress();
+            }
+        }
+        
+        function migrateOldData() {
+            // 将旧的简单数据迁移到新的增强格式
+            Object.keys(learnedPhrases).forEach(key => {
+                if (learnedPhrases[key] && !enhancedLearningData[key]) {
+                    enhancedLearningData[key] = {
+                        learned: true,
+                        firstLearnedAt: new Date().toISOString(),
+                        lastReviewedAt: new Date().toISOString(),
+                        reviewCount: 1,
+                        masteryLevel: 0.6, // 默认熟练度
+                        difficulty: calculatePhraseDifficulty(key),
+                        nextReviewAt: calculateNextReviewDate(1).toISOString(),
+                        reviewHistory: [{
+                            date: new Date().toISOString(),
+                            result: 'correct',
+                            responseTime: 3.0
+                        }]
+                    };
+                }
+            });
+        }
+
+        function initLearningPlan() {
+            allFlattenedPhrases = [];
+            phrasesData.forEach(category => {
+                category.phrases.forEach(phrase => {
+                    allFlattenedPhrases.push(phrase);
+                });
+            });
+            
+            // 使用智能排序算法
+            allFlattenedPhrases = optimizeLearningSequence(allFlattenedPhrases);
+        }
+        
+        // 智能学习算法
+        function calculatePhraseDifficulty(phraseKey) {
+            // 从key中提取短语文本
+            const phrase = phraseKey.replace(/^.*_/, '');
+            
+            const factors = {
+                length: phrase.length / 20, // 标准化长度
+                wordCount: phrase.split(' ').length / 5, // 标准化单词数
+                complexity: getGrammarComplexity(phrase),
+                frequency: 1 - getPhraseFrequency(phrase), // 频率越低难度越高
+                pronunciation: getPronunciationDifficulty(phrase)
+            };
+            
+            // 加权计算总难度 (0-1)
+            return Math.min(1, Math.max(0,
+                factors.length * 0.2 +
+                factors.wordCount * 0.3 +
+                factors.complexity * 0.3 +
+                factors.frequency * 0.1 +
+                factors.pronunciation * 0.1
+            ));
+        }
+        
+        function getGrammarComplexity(phrase) {
+            // 简单的语法复杂度评估
+            const complexPatterns = [
+                /\b(what|how|when|where|why)\b/i, // 疑问词
+                /\b(can|could|would|should|might)\b/i, // 情态动词
+                /\b(because|although|however|therefore)\b/i, // 连接词
+                /'(s|re|ve|ll|t)\b/g // 缩写
+            ];
+            
+            let complexity = 0;
+            complexPatterns.forEach(pattern => {
+                if (pattern.test(phrase)) complexity += 0.2;
+            });
+            
+            return Math.min(1, complexity);
+        }
+        
+        function getPhraseFrequency(phrase) {
+            // 基于常用词汇的频率评估
+            const commonWords = ['hello', 'hi', 'good', 'thank', 'please', 'yes', 'no', 'i', 'you', 'the', 'a', 'an'];
+            const words = phrase.toLowerCase().split(' ');
+            const commonWordCount = words.filter(word => commonWords.includes(word)).length;
+            
+            return Math.min(1, commonWordCount / words.length);
+        }
+        
+        function getPronunciationDifficulty(phrase) {
+            // 简单的发音难度评估
+            const difficultSounds = ['th', 'r', 'l', 'v', 'w', 'ch', 'sh'];
+            let difficulty = 0;
+            
+            difficultSounds.forEach(sound => {
+                if (phrase.toLowerCase().includes(sound)) {
+                    difficulty += 0.1;
+                }
+            });
+            
+            return Math.min(1, difficulty);
+        }
+        
+        function optimizeLearningSequence(phrases) {
+            return phrases.sort((a, b) => {
+                const diffA = calculatePhraseDifficulty(`GLOBAL_${a.en}`);
+                const diffB = calculatePhraseDifficulty(`GLOBAL_${b.en}`);
+                
+                // 考虑认知负荷递增
+                if (Math.abs(diffA - diffB) < 0.1) {
+                    // 难度相近时，按使用频率排序
+                    return getPhraseFrequency(b.en) - getPhraseFrequency(a.en);
+                }
+                return diffA - diffB;
+            });
+        }
+        
+        // 间隔重复算法
+        function calculateNextReviewDate(reviewCount, masteryLevel = 0.5, lastPerformance = 0.8) {
+            let interval;
+            
+            if (lastPerformance >= 0.8) { // 表现良好
+                if (reviewCount === 1) {
+                    interval = 1; // 1天后
+                } else if (reviewCount === 2) {
+                    interval = 3; // 3天后
+                } else if (reviewCount === 3) {
+                    interval = 7; // 1周后
+                } else {
+                    interval = Math.round(Math.pow(2, reviewCount - 3) * 7); // 指数增长
+                }
+            } else { // 表现不佳
+                interval = 1; // 重新开始
+            }
+            
+            // 根据熟练度调整
+            interval = Math.round(interval * (0.5 + masteryLevel));
+            
+            return new Date(Date.now() + interval * 24 * 60 * 60 * 1000);
+        }
+        
+        function updateLearningProgress(phraseKey, performance, responseTime) {
+            const now = new Date().toISOString();
+            
+            if (!enhancedLearningData[phraseKey]) {
+                // 首次学习
+                enhancedLearningData[phraseKey] = {
+                    learned: true,
+                    firstLearnedAt: now,
+                    lastReviewedAt: now,
+                    reviewCount: 1,
+                    masteryLevel: performance,
+                    difficulty: calculatePhraseDifficulty(phraseKey),
+                    nextReviewAt: calculateNextReviewDate(1, performance, performance).toISOString(),
+                    reviewHistory: []
+                };
+                
+                // 更新用户统计
+                userStats.totalLearned++;
+                updateConsecutiveDays();
+                
+                // 记录学习历史
+                userStats.learningHistory.push({
+                    date: now,
+                    action: 'learned',
+                    phraseKey: phraseKey,
+                    result: performance >= 0.8 ? 'correct' : 'incorrect',
+                    responseTime: responseTime || 3.0
+                });
+            } else {
+                // 复习
+                const data = enhancedLearningData[phraseKey];
+                data.lastReviewedAt = now;
+                data.reviewCount++;
+                
+                // 更新熟练度
+                if (performance >= 0.8) {
+                    data.masteryLevel = Math.min(1, data.masteryLevel + 0.1);
+                } else {
+                    data.masteryLevel = Math.max(0, data.masteryLevel - 0.2);
+                }
+                
+                // 计算下次复习时间
+                data.nextReviewAt = calculateNextReviewDate(
+                    data.reviewCount, 
+                    data.masteryLevel, 
+                    performance
+                ).toISOString();
+                
+                // 记录复习历史
+                userStats.learningHistory.push({
+                    date: now,
+                    action: 'reviewed',
+                    phraseKey: phraseKey,
+                    result: performance >= 0.8 ? 'correct' : 'incorrect',
+                    responseTime: responseTime || 3.0
+                });
+            }
+            
+            // 记录学习历史
+            enhancedLearningData[phraseKey].reviewHistory.push({
+                date: now,
+                result: performance >= 0.8 ? 'correct' : 'incorrect',
+                responseTime: responseTime || 3.0,
+                performance: performance
+            });
+            
+            // 保持向后兼容
+            learnedPhrases[phraseKey] = true;
+            
+            // 检查目标完成情况
+            checkGoalCompletion();
+            
+            saveLearnedPhrases();
+        }
+        
+        function updateConsecutiveDays() {
+            const today = new Date().toDateString();
+            const lastStudy = userStats.lastStudyDate;
+            
+            if (lastStudy === today) {
+                return; // 今天已经学习过了
+            }
+            
+            if (lastStudy) {
+                const lastDate = new Date(lastStudy);
+                const todayDate = new Date(today);
+                const daysDiff = (todayDate - lastDate) / (1000 * 60 * 60 * 24);
+                
+                if (daysDiff === 1) {
+                    userStats.consecutiveDays++;
+                } else if (daysDiff > 1) {
+                    userStats.consecutiveDays = 1; // 重新开始
+                }
+            } else {
+                userStats.consecutiveDays = 1;
+            }
+            
+            userStats.lastStudyDate = today;
+        }
+        
+        // 成就系统
+        const achievements = {
+            'first_steps': { 
+                name: '🌱 初学者', 
+                description: '学会第一个短语',
+                condition: (stats) => stats.totalLearned >= 1 
+            },
+            'getting_started': { 
+                name: '🚀 起步者', 
+                description: '学会5个短语',
+                condition: (stats) => stats.totalLearned >= 5 
+            },
+            'dedicated_learner': { 
+                name: '📚 专注学习者', 
+                description: '学会20个短语',
+                condition: (stats) => stats.totalLearned >= 20 
+            },
+            'week_warrior': { 
+                name: '⚡ 一周战士', 
+                description: '连续学习7天',
+                condition: (stats) => stats.consecutiveDays >= 7 
+            },
+            'month_master': { 
+                name: '👑 月度大师', 
+                description: '连续学习30天',
+                condition: (stats) => stats.consecutiveDays >= 30 
+            },
+            'half_way_hero': { 
+                name: '🎯 半程英雄', 
+                description: '学会150个短语',
+                condition: (stats) => stats.totalLearned >= 150 
+            },
+            'completion_champion': { 
+                name: '🏆 完成冠军', 
+                description: '学会所有300个短语',
+                condition: (stats) => stats.totalLearned >= 300 
+            }
+        };
+        
+        function checkAndShowAchievements() {
+            const newAchievements = [];
+            
+            Object.entries(achievements).forEach(([key, achievement]) => {
+                if (!userStats.unlockedAchievements.includes(key) && achievement.condition(userStats)) {
+                    newAchievements.push({ key, ...achievement });
+                    userStats.unlockedAchievements.push(key);
+                }
+            });
+            
+            if (newAchievements.length > 0) {
+                showAchievementNotification(newAchievements);
+                saveLearnedPhrases(); // 保存成就
+            }
+        }
+        
+        function showAchievementNotification(achievements) {
+            achievements.forEach((achievement, index) => {
+                setTimeout(() => {
+                    const notification = document.createElement('div');
+                    notification.className = 'fixed top-4 right-4 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-6 py-4 rounded-lg shadow-lg z-50 transform translate-x-full transition-all duration-500 max-w-sm';
+                    notification.innerHTML = `
+                        <div class="flex items-center space-x-3">
+                            <div class="text-2xl">🎉</div>
+                            <div>
+                                <div class="font-bold text-lg">恭喜获得成就！</div>
+                                <div class="text-sm">${achievement.name}</div>
+                                <div class="text-xs opacity-90">${achievement.description}</div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    document.body.appendChild(notification);
+                    
+                    // 动画显示
+                    setTimeout(() => {
+                        notification.classList.remove('translate-x-full');
+                    }, 100);
+                    
+                    // 自动隐藏
+                    setTimeout(() => {
+                        notification.classList.add('translate-x-full');
+                        setTimeout(() => {
+                            if (document.body.contains(notification)) {
+                                document.body.removeChild(notification);
+                            }
+                        }, 500);
+                    }, 4000);
+                }, index * 1000); // 多个成就依次显示
+            });
+        }
+
+        function updateMainNavigationButtons() {
+            categoryBrowseButton.classList.remove('active');
+            learningHubButton.classList.remove('active');
+            flashcardModeButton.classList.remove('active');
+
+            if (currentMode === 'learning-hub') {
+                learningHubButton.classList.add('active');
+            } else if (currentMode === 'flashcard') {
+                flashcardModeButton.classList.add('active');
+            } else { // category-browse
+                categoryBrowseButton.classList.add('active');
+            }
+        }
+
+        function renderCategoryButtons() {
+            categoryButtonsContainer.innerHTML = '';
+            const categoryIcons = ['👋', '🏠', '🍽️', '👏', '🎮', '🤒', '🌳', '📖', '😊', '🎨', '🐾', '👨‍👩‍👧‍👦', '❓'];
+            
+            phrasesData.forEach((category, index) => {
+                const button = document.createElement('button');
+                button.innerHTML = `${categoryIcons[index] || '📝'} ${category.category}`;
+                button.classList.add('nav-button', 'py-3', 'px-4', 'sm:px-5', 'rounded-xl', 'text-sm', 'sm:text-base', 'font-medium', 'tooltip');
+                button.setAttribute('data-tooltip', category.introduction);
+                
+                // 添加延迟动画
+                button.style.animationDelay = `${index * 0.1}s`;
+                button.classList.add('slide-in-left');
+                
+                button.addEventListener('click', () => {
+                    // 添加点击反馈
+                    button.classList.add('success-indicator');
+                    setTimeout(() => button.classList.remove('success-indicator'), 600);
+                    
+                    currentCategoryIndex = index;
+                    switchMode('category-browse');
+                });
+                
+                // 移动端触摸优化
+                button.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    button.style.transform = 'scale(0.95)';
+                });
+                
+                button.addEventListener('touchend', (e) => {
+                    e.preventDefault();
+                    button.style.transform = '';
+                    button.click();
+                });
+                
+                categoryButtonsContainer.appendChild(button);
+            });
+        }
+        
+        function updateActiveCategoryButton() {
+            const buttons = categoryButtonsContainer.querySelectorAll('.nav-button');
+            buttons.forEach((btn, idx) => {
+                if (idx === currentCategoryIndex && currentMode === 'category-browse') {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+        }
+
+        function renderPhrases(phrasesToRender = null, targetContainer = phrasesContainer, categoryContext = null) {
+            targetContainer.innerHTML = '';
+            const phrases = phrasesToRender || phrasesData[currentCategoryIndex].phrases;
+            const currentCategory = categoryContext || (phrasesToRender ? null : phrasesData[currentCategoryIndex].category);
+
+            if (phrases.length === 0) {
+                targetContainer.innerHTML = '<p class="text-center text-stone-500">此分类下没有短语。</p>';
+                return;
+            }
+
+            phrases.forEach((phrase) => {
+                const card = document.createElement('div');
+                card.classList.add('phrase-card', 'bg-white', 'p-4', 'rounded-lg', 'shadow-md', 'flex', 'flex-col', 'justify-between', 'min-h-[180px]', 'sm:min-h-[200px]');
+                
+                const phraseKey = `${currentCategory || 'GLOBAL'}_${phrase.en}`;
+                const isLearned = learnedPhrases[phraseKey];
+
+                card.innerHTML = `
+                    <div class="flex-1">
+                        <p class="text-lg sm:text-xl font-semibold text-sky-700 mb-3 leading-relaxed">${phrase.en}</p>
+                        <p class="chinese-translation text-stone-600 text-base sm:text-lg hidden transition-all duration-300 ease-in-out transform translate-y-2 opacity-0">${phrase.zh}</p>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-gradient-to-r from-sky-200 to-teal-200">
+                        <div class="flex justify-between items-center gap-2">
+                            <div class="flex items-center space-x-2">
+                                <button class="toggle-translation-button action-button text-xs sm:text-sm px-3 py-2 rounded-lg tooltip" data-tooltip="显示/隐藏中文翻译">
+                                    🔤 翻译
+                                </button>
+                                <button class="pronounce-button p-2 rounded-lg hover:bg-amber-100 group tooltip transition-all duration-200" data-tooltip="点击听发音">
+                                    <svg class="speaker-icon w-5 h-5 sm:w-6 sm:h-6 text-teal-500 group-hover:text-teal-600 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
+                                </button>
+                            </div>
+                            <button class="mark-learned-button text-xs sm:text-sm px-3 py-2 rounded-lg border-2 transition-all duration-300 tooltip ${isLearned ? 'bg-gradient-to-r from-emerald-100 to-emerald-200 text-emerald-700 border-emerald-300 shadow-md' : 'border-stone-300 hover:bg-gradient-to-r hover:from-stone-50 hover:to-stone-100'}" data-tooltip="${isLearned ? '点击取消标记' : '标记为已学'}">
+                                ${isLearned ? '✅ 已学' : '📝 标记'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                const toggleButton = card.querySelector('.toggle-translation-button');
+                const translationP = card.querySelector('.chinese-translation');
+                toggleButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const isHidden = translationP.classList.contains('hidden');
+                    
+                    if (isHidden) {
+                        translationP.classList.remove('hidden', 'translate-y-2', 'opacity-0');
+                        translationP.classList.add('translate-y-0', 'opacity-100');
+                        toggleButton.innerHTML = '🔤 隐藏';
+                        toggleButton.setAttribute('data-tooltip', '隐藏中文翻译');
+                    } else {
+                        translationP.classList.add('translate-y-2', 'opacity-0');
+                        setTimeout(() => {
+                            translationP.classList.add('hidden');
+                            translationP.classList.remove('translate-y-0', 'opacity-100');
+                        }, 300);
+                        toggleButton.innerHTML = '🔤 翻译';
+                        toggleButton.setAttribute('data-tooltip', '显示中文翻译');
+                    }
+                    
+                    // 添加按钮反馈动画
+                    toggleButton.classList.add('success-indicator');
+                    setTimeout(() => toggleButton.classList.remove('success-indicator'), 600);
+                });
+
+                const pronounceButton = card.querySelector('.pronounce-button');
+                const speakerIcon = pronounceButton.querySelector('.speaker-icon');
+                pronounceButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    
+                    // 防止重复点击
+                    if (speakerIcon.classList.contains('playing')) return;
+                    
+                    speakerIcon.classList.add('playing');
+                    pronounceButton.classList.add('success-indicator');
+                    
+                    try {
+                        if ('speechSynthesis' in window) {
+                            // 停止之前的语音
+                            speechSynthesis.cancel();
+                            
+                            const utterance = new SpeechSynthesisUtterance(phrase.en);
+                            utterance.lang = 'en-US';
+                            utterance.rate = 0.8; // 稍慢的语速，适合儿童
+                            utterance.pitch = 1.1; // 稍高的音调
+                            
+                            utterance.onend = () => {
+                                speakerIcon.classList.remove('playing');
+                                pronounceButton.classList.remove('success-indicator');
+                            };
+                            
+                            utterance.onerror = () => {
+                                speakerIcon.classList.remove('playing');
+                                pronounceButton.classList.remove('success-indicator');
+                                pronounceButton.classList.add('error-shake');
+                                setTimeout(() => pronounceButton.classList.remove('error-shake'), 500);
+                            };
+                            
+                            speechSynthesis.speak(utterance);
+                        } else {
+                            throw new Error('Speech synthesis not supported');
+                        }
+                    } catch (error) {
+                        console.warn('语音播放失败:', error);
+                        speakerIcon.classList.remove('playing');
+                        pronounceButton.classList.remove('success-indicator');
+                        pronounceButton.classList.add('error-shake');
+                        setTimeout(() => pronounceButton.classList.remove('error-shake'), 500);
+                    }
+                });
+                
+                const markLearnedButton = card.querySelector('.mark-learned-button');
+                markLearnedButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const currentPhraseKey = `${currentCategory || 'GLOBAL'}_${phrase.en}`;
+                    const wasLearned = learnedPhrases[currentPhraseKey];
+                    
+                    // 添加点击动画
+                    markLearnedButton.classList.add('success-indicator');
+                    
+                    if (wasLearned) {
+                        // 取消标记
+                        delete learnedPhrases[currentPhraseKey];
+                        delete enhancedLearningData[currentPhraseKey];
+                        
+                        markLearnedButton.innerHTML = '📝 标记';
+                        markLearnedButton.classList.remove('bg-gradient-to-r', 'from-emerald-100', 'to-emerald-200', 'text-emerald-700', 'border-emerald-300', 'shadow-md');
+                        markLearnedButton.classList.add('border-stone-300', 'hover:bg-gradient-to-r', 'hover:from-stone-50', 'hover:to-stone-100');
+                        markLearnedButton.setAttribute('data-tooltip', '标记为已学');
+                        
+                        userStats.totalLearned = Math.max(0, userStats.totalLearned - 1);
+                    } else {
+                        // 标记为已学 - 使用智能学习系统
+                        const startTime = Date.now();
+                        
+                        // 模拟学习表现（实际应用中可以通过用户交互获得）
+                        const performance = 0.8; // 默认良好表现
+                        const responseTime = (Date.now() - startTime) / 1000;
+                        
+                        updateLearningProgress(currentPhraseKey, performance, responseTime);
+                        
+                        markLearnedButton.innerHTML = '✅ 已学';
+                        markLearnedButton.classList.add('bg-gradient-to-r', 'from-emerald-100', 'to-emerald-200', 'text-emerald-700', 'border-emerald-300', 'shadow-md');
+                        markLearnedButton.classList.remove('border-stone-300', 'hover:bg-gradient-to-r', 'hover:from-stone-50', 'hover:to-stone-100');
+                        markLearnedButton.setAttribute('data-tooltip', '点击取消标记');
+                        
+                        // 庆祝动画
+                        setTimeout(() => {
+                            markLearnedButton.style.transform = 'scale(1.1)';
+                            setTimeout(() => {
+                                markLearnedButton.style.transform = '';
+                            }, 200);
+                        }, 100);
+                        
+                        // 显示学习成就
+                        checkAndShowAchievements();
+                    }
+                    
+                    setTimeout(() => markLearnedButton.classList.remove('success-indicator'), 600);
+                });
+
+                targetContainer.appendChild(card);
+            });
+        }
+
+        function loadFlashcardSet() {
+            let source = document.querySelector('input[name="flashcard-source"]:checked').value;
+            flashcardSet = [];
+
+            if (source === 'all') {
+                flashcardSet = [...allFlattenedPhrases];
+            } else if (source === 'category') {
+                flashcardSet = [...phrasesData[currentCategoryIndex].phrases];
+            } else if (source === 'unlearned') {
+                flashcardSet = allFlattenedPhrases.filter(phrase => !learnedPhrases[`GLOBAL_${phrase.en}`]);
+            }
+            
+            for (let i = flashcardSet.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [flashcardSet[i], flashcardSet[j]] = [flashcardSet[j], flashcardSet[i]];
+            }
+
+            currentFlashcardIndex = 0;
+        }
+
+
+        function renderFlashcard() {
+            flashcardDisplayArea.innerHTML = '';
+            // flashcardAssessmentButtons.classList.add('hidden'); // Removed assessment buttons
+            // flashcardNavButtons.classList.remove('hidden'); // Always visible now
+
+            if (flashcardSet.length === 0) {
+                flashcardDisplayArea.innerHTML = '<p class="text-center text-stone-500 py-10">当前来源没有短语可供学习。</p>';
+                flashcardCounter.textContent = '0 / 0';
+                return;
+            }
+
+            const phrase = flashcardSet[currentFlashcardIndex];
+            
+            const flashcardDiv = document.createElement('div');
+            flashcardDiv.classList.add('flashcard', 'h-64', 'sm:h-80', 'max-w-md', 'mx-auto');
+            flashcardDiv.innerHTML = `
+                <div class="flashcard-inner">
+                    <div class="flashcard-front text-2xl sm:text-3xl font-semibold text-sky-700 flex flex-col justify-center items-center">
+                        <p>${phrase.en}</p>
+                        <button class="pronounce-button mt-4 p-2 rounded-full hover:bg-amber-100 group">
+                            <svg class="speaker-icon w-6 h-6 sm:w-7 sm:h-7 text-teal-500 group-hover:text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
+                        </button>
+                    </div>
+                    <div class="flashcard-back text-xl sm:text-2xl font-semibold text-emerald-700 flex flex-col justify-center items-center">
+                        <p>${phrase.zh}</p>
+                        <button class="pronounce-button mt-4 p-2 rounded-full hover:bg-amber-100 group">
+                            <svg class="speaker-icon w-6 h-6 sm:w-7 sm:h-7 text-teal-500 group-hover:text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            const flashcardInner = flashcardDiv.querySelector('.flashcard-inner');
+            
+            // Add click listener to the flashcardDiv (the outer container) for flipping
+            flashcardDiv.addEventListener('click', (event) => {
+                // If the clicked element or any of its parents is a pronounce button, do not flip the card.
+                if (event.target.closest('.pronounce-button')) {
+                    return;
+                }
+                
+                // Toggle the 'flipped' class to trigger the 3D flip effect
+                flashcardInner.classList.toggle('flipped');
+            });
+            
+            flashcardDisplayArea.appendChild(flashcardDiv);
+
+            const pronounceButtons = flashcardDiv.querySelectorAll('.pronounce-button');
+            pronounceButtons.forEach(button => {
+                const speakerIcon = button.querySelector('.speaker-icon');
+                button.addEventListener('click', (event) => {
+                    event.stopPropagation(); // Crucial: Stop click from bubbling up to flip the card
+                    speakerIcon.classList.add('playing');
+                    setTimeout(() => speakerIcon.classList.remove('playing'), 1000);
+
+                    if ('speechSynthesis' in window) {
+                        const utterance = new SpeechSynthesisUtterance(phrase.en);
+                        utterance.lang = 'en-US';
+                        speechSynthesis.speak(utterance);
+                    } else {
+                        console.warn('Web Speech API is not supported in this browser.');
+                    }
+                });
+            });
+
+            updateFlashcardCounter();
+            updateMarkLearnedFlashcardButtonState(); // Update button state when card renders
+        }
+
+        function updateFlashcardCounter() {
+            flashcardCounter.textContent = `${flashcardSet.length > 0 ? currentFlashcardIndex + 1 : 0} / ${flashcardSet.length}`;
+        }
+
+        function updateMarkLearnedFlashcardButtonState() {
+            if (flashcardSet.length > 0) {
+                const currentPhrase = flashcardSet[currentFlashcardIndex];
+                const phraseKey = `GLOBAL_${currentPhrase.en}`;
+                if (learnedPhrases[phraseKey]) {
+                    markLearnedFlashcardButton.innerHTML = '✔ 已学';
+                    markLearnedFlashcardButton.classList.add('bg-emerald-500', 'hover:bg-emerald-600');
+                    markLearnedFlashcardButton.classList.remove('bg-sky-600', 'hover:bg-sky-700');
+                } else {
+                    markLearnedFlashcardButton.innerHTML = '标记已学';
+                    markLearnedFlashcardButton.classList.remove('bg-emerald-500', 'hover:bg-emerald-600');
+                    markLearnedFlashcardButton.classList.add('bg-sky-600', 'hover:bg-sky-700');
+                }
+            } else {
+                 markLearnedFlashcardButton.innerHTML = '标记已学'; // Default state if no cards
+                 markLearnedFlashcardButton.classList.remove('bg-emerald-500', 'hover:bg-emerald-600');
+                 markLearnedFlashcardButton.classList.add('bg-sky-600', 'hover:bg-sky-700');
+            }
+        }
+
+        function showNextFlashcard() {
+            if (flashcardSet.length === 0) return;
+
+            if (currentFlashcardIndex < flashcardSet.length - 1) {
+                currentFlashcardIndex++;
+            } else {
+                currentFlashcardIndex = 0; // Loop back to start
+            }
+            renderFlashcard();
+            const currentCardInner = flashcardDisplayArea.querySelector('.flashcard-inner');
+            if (currentCardInner) {
+                currentCardInner.classList.remove('flipped'); // Ensure new card starts unflipped
+            }
+        }
+
+        function showPrevFlashcard() {
+            if (flashcardSet.length === 0) return;
+
+            if (currentFlashcardIndex > 0) {
+                currentFlashcardIndex--;
+            } else {
+                currentFlashcardIndex = flashcardSet.length - 1;
+            }
+            renderFlashcard();
+            const currentCardInner = flashcardDisplayArea.querySelector('.flashcard-inner');
+            if (currentCardInner) {
+                currentCardInner.classList.remove('flipped'); // Ensure new card starts unflipped
+            }
+        }
+
+
+        function renderLearningPlan() {
+            const totalDays = Math.ceil(allFlattenedPhrases.length / phrasesPerDay);
+            currentDayDisplay.textContent = `第 ${currentLearningDay + 1} 天 / 共 ${totalDays} 天`;
+            categoryIntro.textContent = "";
+
+            const startIndex = currentLearningDay * phrasesPerDay;
+            const endIndex = Math.min(startIndex + phrasesPerDay, allFlattenedPhrases.length);
+            const dailyPhrases = allFlattenedPhrases.slice(startIndex, endIndex);
+
+            if (dailyPhrases.length === 0) {
+                dailyPhrasesDisplay.innerHTML = '<p class="text-center text-stone-500">恭喜您！所有短语都已在学习计划中展示完毕。</p>';
+            } else {
+                renderPhrases(dailyPhrases, dailyPhrasesDisplay, 'GLOBAL');
+            }
+        }
+
+        function generateUnlearnedPhrasesForReview() {
+            // 使用智能复习算法
+            const reviewQueue = generateSmartReviewQueue();
+            
+            if (reviewQueue.length > 0) {
+                // 有需要复习的内容
+                unlearnedPhrasesForReview = reviewQueue.map(item => {
+                    const phraseKey = item.key.replace('GLOBAL_', '');
+                    return allFlattenedPhrases.find(p => p.en === phraseKey);
+                }).filter(p => p); // 过滤掉找不到的短语
+            } else {
+                // 没有需要复习的，显示未学习的
+                unlearnedPhrasesForReview = allFlattenedPhrases.filter(phrase => {
+                    return !learnedPhrases[`GLOBAL_${phrase.en}`];
+                });
+                
+                // 按难度排序，而不是随机
+                unlearnedPhrasesForReview.sort((a, b) => {
+                    const diffA = calculatePhraseDifficulty(`GLOBAL_${a.en}`);
+                    const diffB = calculatePhraseDifficulty(`GLOBAL_${b.en}`);
+                    return diffA - diffB;
+                });
+            }
+        }
+        
+        function generateSmartReviewQueue() {
+            const now = new Date();
+            const reviewQueue = [];
+            
+            Object.entries(enhancedLearningData).forEach(([key, data]) => {
+                if (data.learned && new Date(data.nextReviewAt) <= now) {
+                    const priority = calculateReviewPriority(data, now);
+                    reviewQueue.push({ key, data, priority });
+                }
+            });
+            
+            // 按优先级排序
+            return reviewQueue.sort((a, b) => b.priority - a.priority);
+        }
+        
+        function calculateReviewPriority(data, now) {
+            const overdueDays = Math.max(0, (now - new Date(data.nextReviewAt)) / (24 * 60 * 60 * 1000));
+            const forgettingRisk = 1 - data.masteryLevel;
+            const importance = 1 - data.difficulty; // 简单的短语更重要
+            
+            return (1 + overdueDays) * forgettingRisk * importance;
+        }
+
+        function renderReviewPlan() {
+            const phrasesInReviewSet = 9;
+            const totalReviewSets = Math.ceil(unlearnedPhrasesForReview.length / phrasesInReviewSet);
+            
+            // 检查是否有需要复习的内容
+            const reviewQueue = generateSmartReviewQueue();
+            const hasReviewItems = reviewQueue.length > 0;
+            
+            if (hasReviewItems) {
+                categoryIntro.textContent = `智能复习: 第 ${currentReviewSetIndex + 1} 页 / 共 ${totalReviewSets} 页 (${unlearnedPhrasesForReview.length} 个需要复习的短语)`;
+            } else {
+                categoryIntro.textContent = `学习新内容: 第 ${currentReviewSetIndex + 1} 页 / 共 ${totalReviewSets} 页 (${unlearnedPhrasesForReview.length} 个未学短语)`;
+            }
+
+            if (unlearnedPhrasesForReview.length === 0) {
+                if (hasReviewItems) {
+                    reviewPhrasesDisplay.innerHTML = '<p class="text-center text-stone-500 text-lg py-10">🎉 太棒了！当前没有需要复习的短语！</p>';
+                } else {
+                    reviewPhrasesDisplay.innerHTML = '<p class="text-center text-stone-500 text-lg py-10">🎉 恭喜！您已经掌握了所有短语，太棒了！</p>';
+                }
+                return;
+            }
+
+            const startIndex = currentReviewSetIndex * phrasesInReviewSet;
+            const endIndex = Math.min(startIndex + phrasesInReviewSet, unlearnedPhrasesForReview.length);
+            const currentSetPhrases = unlearnedPhrasesForReview.slice(startIndex, endIndex);
+
+            renderPhrases(currentSetPhrases, reviewPhrasesDisplay, 'GLOBAL');
+            
+            // 添加复习提示
+            if (hasReviewItems && currentReviewSetIndex === 0) {
+                addReviewTips();
+            }
+        }
+        
+        function addReviewTips() {
+            const existingTips = document.getElementById('review-tips');
+            if (existingTips) {
+                existingTips.remove();
+            }
+            
+            const tipsContainer = document.createElement('div');
+            tipsContainer.id = 'review-tips';
+            tipsContainer.className = 'bg-blue-50 border-l-4 border-blue-400 p-4 mb-4 rounded-r-lg';
+            tipsContainer.innerHTML = `
+                <div class="flex items-start">
+                    <div class="text-blue-400 mr-3 text-xl">💡</div>
+                    <div>
+                        <h4 class="text-blue-800 font-semibold mb-2">智能复习提示</h4>
+                        <p class="text-blue-700 text-sm">
+                            这些短语是根据您的学习情况和遗忘曲线智能推荐的。
+                            定期复习可以帮助您更好地记住已学内容！
+                        </p>
+                    </div>
+                </div>
+            `;
+            
+            reviewPhrasesDisplay.parentNode.insertBefore(tipsContainer, reviewPhrasesDisplay);
+        }
+
+        function updateMyProgress() {
+            let totalPhrases = allFlattenedPhrases.length;
+            let learnedCount = userStats.totalLearned;
+            const percentage = totalPhrases === 0 ? 0 : Math.round((learnedCount / totalPhrases) * 100);
+
+            totalPhrasesCount.textContent = totalPhrases;
+            learnedPhrasesCount.textContent = learnedCount;
+            progressPercentage.textContent = percentage;
+            progressBarFill.style.width = `${percentage}%`;
+
+            // 更新详细统计信息
+            updateDetailedStats();
+            
+            // 更新分类进度
+            categoryProgressDisplay.innerHTML = '';
+            phrasesData.forEach(category => {
+                let categoryLearnedCount = 0;
+                let categoryMasterySum = 0;
+                
+                category.phrases.forEach(phrase => {
+                    const phraseKey = `GLOBAL_${phrase.en}`;
+                    if (learnedPhrases[phraseKey]) { 
+                        categoryLearnedCount++;
+                        const enhancedData = enhancedLearningData[phraseKey];
+                        if (enhancedData) {
+                            categoryMasterySum += enhancedData.masteryLevel;
+                        }
+                    }
+                });
+                
+                const categoryPercentage = category.phrases.length === 0 ? 0 : Math.round((categoryLearnedCount / category.phrases.length) * 100);
+                const avgMastery = categoryLearnedCount === 0 ? 0 : Math.round((categoryMasterySum / categoryLearnedCount) * 100);
+
+                const categoryProgressCard = document.createElement('div');
+                categoryProgressCard.classList.add('bg-stone-100', 'p-3', 'rounded-lg', 'shadow-sm');
+                categoryProgressCard.innerHTML = `
+                    <p class="font-semibold text-stone-800">${category.category}: ${categoryLearnedCount} / ${category.phrases.length} 句</p>
+                    <div class="w-full bg-stone-300 rounded-full h-2 mt-1">
+                        <div class="bg-blue-500 h-full rounded-full" style="width: ${categoryPercentage}%;"></div>
+                    </div>
+                    ${categoryLearnedCount > 0 ? `<p class="text-xs text-stone-600 mt-1">平均熟练度: ${avgMastery}%</p>` : ''}
+                `;
+                categoryProgressDisplay.appendChild(categoryProgressCard);
+            });
+            
+            // 显示成就
+            displayAchievements();
+        }
+        
+        function updateDetailedStats() {
+            // 在进度页面添加详细统计信息
+            const existingStats = document.getElementById('detailed-stats');
+            if (existingStats) {
+                existingStats.remove();
+            }
+            
+            const statsContainer = document.createElement('div');
+            statsContainer.id = 'detailed-stats';
+            statsContainer.className = 'bg-gradient-to-r from-blue-50 to-teal-50 p-4 rounded-lg mb-6';
+            
+            // 计算需要复习的短语数量
+            const reviewQueue = generateSmartReviewQueue();
+            const needReview = reviewQueue.length;
+            
+            // 计算平均熟练度
+            const learnedData = Object.values(enhancedLearningData).filter(data => data.learned);
+            const avgMastery = learnedData.length === 0 ? 0 : 
+                Math.round((learnedData.reduce((sum, data) => sum + data.masteryLevel, 0) / learnedData.length) * 100);
+            
+            statsContainer.innerHTML = `
+                <h4 class="text-lg font-semibold text-teal-700 mb-3">📊 详细统计</h4>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+                    <div class="bg-white p-3 rounded-lg">
+                        <div class="text-2xl font-bold text-blue-600">${userStats.consecutiveDays}</div>
+                        <div class="text-xs text-stone-600">连续天数</div>
+                    </div>
+                    <div class="bg-white p-3 rounded-lg">
+                        <div class="text-2xl font-bold text-green-600">${avgMastery}%</div>
+                        <div class="text-xs text-stone-600">平均熟练度</div>
+                    </div>
+                    <div class="bg-white p-3 rounded-lg">
+                        <div class="text-2xl font-bold text-orange-600">${needReview}</div>
+                        <div class="text-xs text-stone-600">待复习</div>
+                    </div>
+                    <div class="bg-white p-3 rounded-lg">
+                        <div class="text-2xl font-bold text-purple-600">${userStats.unlockedAchievements.length}</div>
+                        <div class="text-xs text-stone-600">获得成就</div>
+                    </div>
+                </div>
+            `;
+            
+            // 插入到进度百分比后面
+            const progressSection = document.querySelector('#my-progress-content .flex.flex-col.items-center');
+            progressSection.parentNode.insertBefore(statsContainer, progressSection.nextSibling);
+        }
+        
+        function displayAchievements() {
+            // 显示已获得的成就
+            const existingAchievements = document.getElementById('achievements-display');
+            if (existingAchievements) {
+                existingAchievements.remove();
+            }
+            
+            if (userStats.unlockedAchievements.length === 0) return;
+            
+            const achievementsContainer = document.createElement('div');
+            achievementsContainer.id = 'achievements-display';
+            achievementsContainer.className = 'mt-6';
+            achievementsContainer.innerHTML = `
+                <h4 class="text-lg font-semibold text-sky-600 mb-3 text-center">🏆 我的成就</h4>
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    ${userStats.unlockedAchievements.map(key => {
+                        const achievement = achievements[key];
+                        return `
+                            <div class="bg-gradient-to-r from-yellow-100 to-orange-100 p-3 rounded-lg text-center border-2 border-yellow-300">
+                                <div class="text-lg mb-1">${achievement.name}</div>
+                                <div class="text-xs text-stone-600">${achievement.description}</div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+            
+            categoryProgressDisplay.parentNode.appendChild(achievementsContainer);
+        }
+        
+        // 今日学习统计更新
+        function updateTodayStats() {
+            const today = new Date().toDateString();
+            const todayLearned = getTodayLearnedCount();
+            const reviewQueue = generateSmartReviewQueue();
+            
+            document.getElementById('today-target').textContent = userStats.dailyTarget;
+            document.getElementById('today-completed').textContent = todayLearned;
+            document.getElementById('today-review').textContent = reviewQueue.length;
+            document.getElementById('study-streak').textContent = userStats.consecutiveDays;
+            
+            const progressPercent = Math.round((todayLearned / userStats.dailyTarget) * 100);
+            document.getElementById('today-progress-text').textContent = `${progressPercent}%`;
+            document.getElementById('today-progress-bar').style.width = `${Math.min(100, progressPercent)}%`;
+        }
+        
+        function getTodayLearnedCount() {
+            const today = new Date().toDateString();
+            return userStats.learningHistory.filter(entry => 
+                new Date(entry.date).toDateString() === today && entry.action === 'learned'
+            ).length;
+        }
+        
+        // 学习模式管理
+        function setupLearningModeSelection() {
+            const modeOptions = document.querySelectorAll('.learning-mode-option');
+            modeOptions.forEach(option => {
+                const radio = option.querySelector('input[type="radio"]');
+                const container = option.querySelector('div');
+                
+                option.addEventListener('click', () => {
+                    // 更新UI
+                    modeOptions.forEach(opt => {
+                        opt.querySelector('div').classList.remove('border-blue-400', 'bg-blue-50');
+                        opt.querySelector('div').classList.add('border-stone-200');
+                    });
+                    
+                    container.classList.remove('border-stone-200');
+                    container.classList.add('border-blue-400', 'bg-blue-50');
+                    radio.checked = true;
+                    
+                    // 更新学习模式
+                    userStats.learningMode = radio.value;
+                    updateDailyTargetByMode();
+                    saveLearnedPhrases();
+                });
+            });
+        }
+        
+        function updateDailyTargetByMode() {
+            const modeTargets = {
+                'beginner': 3,
+                'normal': 5,
+                'intensive': 8
+            };
+            
+            userStats.dailyTarget = modeTargets[userStats.learningMode] || 5;
+            document.getElementById('phrases-per-day-input').value = userStats.dailyTarget;
+            phrasesPerDay = userStats.dailyTarget;
+        }
+        
+        // 智能规划功能
+        function generateSmartPlan() {
+            const userAbility = assessUserAbility();
+            const recommendations = generateRecommendations(userAbility);
+            
+            showSmartPlanDialog(recommendations);
+        }
+        
+        function assessUserAbility() {
+            const recentHistory = userStats.learningHistory.slice(-20);
+            if (recentHistory.length === 0) {
+                return { level: 'beginner', confidence: 0.5 };
+            }
+            
+            const avgAccuracy = recentHistory.filter(h => h.result === 'correct').length / recentHistory.length;
+            const avgResponseTime = recentHistory.reduce((sum, h) => sum + (h.responseTime || 3), 0) / recentHistory.length;
+            
+            let level = 'normal';
+            if (avgAccuracy > 0.9 && avgResponseTime < 2) {
+                level = 'intensive';
+            } else if (avgAccuracy < 0.7 || avgResponseTime > 4) {
+                level = 'beginner';
+            }
+            
+            return { level, accuracy: avgAccuracy, responseTime: avgResponseTime };
+        }
+        
+        function generateRecommendations(ability) {
+            const recommendations = [];
+            
+            if (ability.level === 'intensive') {
+                recommendations.push('建议切换到强化模式，每天学习8个短语');
+                recommendations.push('可以尝试更难的短语分类');
+            } else if (ability.level === 'beginner') {
+                recommendations.push('建议切换到初学者模式，每天学习3个短语');
+                recommendations.push('多花时间在复习上，巩固已学内容');
+            } else {
+                recommendations.push('当前学习节奏很好，保持标准模式');
+                recommendations.push('可以适当增加学习量或尝试新的分类');
+            }
+            
+            return recommendations;
+        }
+        
+        function showSmartPlanDialog(recommendations) {
+            const dialog = document.createElement('div');
+            dialog.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            dialog.innerHTML = `
+                <div class="bg-white p-6 rounded-lg max-w-md mx-4">
+                    <h3 class="text-lg font-bold text-sky-600 mb-4">🤖 智能学习建议</h3>
+                    <div class="space-y-2 mb-4">
+                        ${recommendations.map(rec => `<p class="text-sm text-stone-600">• ${rec}</p>`).join('')}
+                    </div>
+                    <div class="flex gap-2">
+                        <button class="accept-plan flex-1 bg-blue-500 text-white py-2 px-4 rounded-lg">采纳建议</button>
+                        <button class="cancel-plan flex-1 bg-stone-300 text-stone-700 py-2 px-4 rounded-lg">暂不采纳</button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(dialog);
+            
+            dialog.querySelector('.accept-plan').addEventListener('click', () => {
+                // 应用建议
+                const ability = assessUserAbility();
+                userStats.learningMode = ability.level;
+                updateDailyTargetByMode();
+                updateTodayStats();
+                document.body.removeChild(dialog);
+                showSuccessMessage('已应用智能学习建议！');
+            });
+            
+            dialog.querySelector('.cancel-plan').addEventListener('click', () => {
+                document.body.removeChild(dialog);
+            });
+        }
+        
+        // 学习目标管理
+        function renderLearningGoals() {
+            renderCurrentGoals();
+            renderCompletedGoals();
+        }
+        
+        function renderCurrentGoals() {
+            const container = document.getElementById('current-goals-display');
+            const activeGoals = userStats.goals.filter(goal => !goal.completed);
+            
+            if (activeGoals.length === 0) {
+                container.innerHTML = '<p class="text-stone-500 text-center py-4">暂无活跃目标，设定一个新目标开始吧！</p>';
+                return;
+            }
+            
+            container.innerHTML = activeGoals.map(goal => {
+                const progress = calculateGoalProgress(goal);
+                const progressPercent = Math.round((progress.current / progress.target) * 100);
+                
+                return `
+                    <div class="bg-white p-4 rounded-lg border-l-4 border-purple-400 mb-3">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-semibold text-stone-800">${goal.description}</h4>
+                            <button class="text-red-500 hover:text-red-700 text-sm" onclick="removeGoal('${goal.id}')">删除</button>
+                        </div>
+                        <div class="text-sm text-stone-600 mb-2">${goal.type} • 目标: ${progress.target}</div>
+                        <div class="flex justify-between text-sm text-stone-600 mb-1">
+                            <span>进度: ${progress.current} / ${progress.target}</span>
+                            <span>${progressPercent}%</span>
+                        </div>
+                        <div class="w-full bg-stone-200 rounded-full h-2">
+                            <div class="bg-purple-500 h-full rounded-full transition-all duration-300" style="width: ${Math.min(100, progressPercent)}%;"></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function renderCompletedGoals() {
+            const container = document.getElementById('completed-goals-display');
+            const completedGoals = userStats.goals.filter(goal => goal.completed);
+            
+            if (completedGoals.length === 0) {
+                container.innerHTML = '<p class="text-stone-500 text-center py-4">还没有完成的目标，继续努力！</p>';
+                return;
+            }
+            
+            container.innerHTML = completedGoals.slice(-5).map(goal => `
+                <div class="bg-white p-3 rounded-lg border-l-4 border-green-400 mb-2">
+                    <div class="font-medium text-stone-800">${goal.description}</div>
+                    <div class="text-sm text-stone-600">完成于: ${new Date(goal.completedAt).toLocaleDateString()}</div>
+                </div>
+            `).join('');
+        }
+        
+        function addNewGoal() {
+            const type = document.getElementById('goal-type-select').value;
+            const value = parseInt(document.getElementById('goal-value-input').value);
+            const description = document.getElementById('goal-description-input').value;
+            
+            if (!description.trim()) {
+                showErrorMessage('请输入目标描述');
+                return;
+            }
+            
+            const goal = {
+                id: Date.now().toString(),
+                type: type,
+                value: value,
+                description: description,
+                createdAt: new Date().toISOString(),
+                completed: false
+            };
+            
+            userStats.goals.push(goal);
+            saveLearnedPhrases();
+            renderLearningGoals();
+            
+            // 清空表单
+            document.getElementById('goal-description-input').value = '';
+            document.getElementById('goal-value-input').value = '10';
+            
+            showSuccessMessage('目标添加成功！');
+        }
+        
+        function calculateGoalProgress(goal) {
+            const today = new Date().toDateString();
+            const thisWeek = getWeekStart(new Date());
+            
+            switch (goal.type) {
+                case 'daily':
+                    return {
+                        current: getTodayLearnedCount(),
+                        target: goal.value
+                    };
+                case 'weekly':
+                    return {
+                        current: getWeekLearnedCount(thisWeek),
+                        target: goal.value
+                    };
+                case 'total':
+                    return {
+                        current: userStats.totalLearned,
+                        target: goal.value
+                    };
+                case 'streak':
+                    return {
+                        current: userStats.consecutiveDays,
+                        target: goal.value
+                    };
+                default:
+                    return { current: 0, target: goal.value };
+            }
+        }
+        
+        function getWeekLearnedCount(weekStart) {
+            const weekEnd = new Date(weekStart);
+            weekEnd.setDate(weekEnd.getDate() + 7);
+            
+            return userStats.learningHistory.filter(entry => {
+                const entryDate = new Date(entry.date);
+                return entryDate >= weekStart && entryDate < weekEnd && entry.action === 'learned';
+            }).length;
+        }
+        
+        function getWeekStart(date) {
+            const d = new Date(date);
+            const day = d.getDay();
+            const diff = d.getDate() - day;
+            return new Date(d.setDate(diff));
+        }
+        
+        window.removeGoal = function(goalId) {
+            userStats.goals = userStats.goals.filter(goal => goal.id !== goalId);
+            saveLearnedPhrases();
+            renderLearningGoals();
+            showSuccessMessage('目标已删除');
+        }
+        
+        function checkGoalCompletion() {
+            userStats.goals.forEach(goal => {
+                if (!goal.completed) {
+                    const progress = calculateGoalProgress(goal);
+                    if (progress.current >= progress.target) {
+                        goal.completed = true;
+                        goal.completedAt = new Date().toISOString();
+                        showGoalCompletionNotification(goal);
+                    }
+                }
+            });
+        }
+        
+        function showGoalCompletionNotification(goal) {
+            const notification = document.createElement('div');
+            notification.className = 'fixed top-4 right-4 bg-gradient-to-r from-green-400 to-emerald-500 text-white px-6 py-4 rounded-lg shadow-lg z-50 transform translate-x-full transition-all duration-500 max-w-sm';
+            notification.innerHTML = `
+                <div class="flex items-center space-x-3">
+                    <div class="text-2xl">🎯</div>
+                    <div>
+                        <div class="font-bold text-lg">目标达成！</div>
+                        <div class="text-sm">${goal.description}</div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => notification.classList.remove('translate-x-full'), 100);
+            setTimeout(() => {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => document.body.removeChild(notification), 500);
+            }, 4000);
+        }
+        
+        // 学习洞察分析
+        function renderLearningInsights() {
+            renderLearningPatterns();
+            renderPersonalizedSuggestions();
+            renderEfficiencyAnalysis();
+            renderLearningPredictions();
+        }
+        
+        function renderLearningPatterns() {
+            const container = document.getElementById('learning-patterns-display');
+            const patterns = analyzeLearningPatterns();
+            
+            container.innerHTML = `
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="bg-white p-3 rounded-lg">
+                        <div class="text-lg font-bold text-indigo-600">${patterns.bestTimeOfDay || '暂无数据'}</div>
+                        <div class="text-sm text-stone-600">最佳学习时间</div>
+                    </div>
+                    <div class="bg-white p-3 rounded-lg">
+                        <div class="text-lg font-bold text-indigo-600">${patterns.averageSessionLength}分钟</div>
+                        <div class="text-sm text-stone-600">平均学习时长</div>
+                    </div>
+                    <div class="bg-white p-3 rounded-lg">
+                        <div class="text-lg font-bold text-indigo-600">${patterns.strongestCategory || '暂无数据'}</div>
+                        <div class="text-sm text-stone-600">最强分类</div>
+                    </div>
+                    <div class="bg-white p-3 rounded-lg">
+                        <div class="text-lg font-bold text-indigo-600">${patterns.learningStreak}天</div>
+                        <div class="text-sm text-stone-600">最长连续学习</div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function renderPersonalizedSuggestions() {
+            const container = document.getElementById('personalized-suggestions-display');
+            const suggestions = generatePersonalizedSuggestions();
+            
+            container.innerHTML = suggestions.map(suggestion => `
+                <div class="bg-white p-3 rounded-lg mb-2 border-l-4 border-orange-400">
+                    <div class="font-medium text-stone-800">${suggestion.title}</div>
+                    <div class="text-sm text-stone-600">${suggestion.description}</div>
+                </div>
+            `).join('');
+        }
+        
+        function renderEfficiencyAnalysis() {
+            const container = document.getElementById('efficiency-analysis-display');
+            const efficiency = analyzeEfficiency();
+            
+            container.innerHTML = `
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="bg-white p-3 rounded-lg text-center">
+                        <div class="text-2xl font-bold text-teal-600">${efficiency.accuracy}%</div>
+                        <div class="text-sm text-stone-600">学习准确率</div>
+                    </div>
+                    <div class="bg-white p-3 rounded-lg text-center">
+                        <div class="text-2xl font-bold text-teal-600">${efficiency.speed}s</div>
+                        <div class="text-sm text-stone-600">平均响应时间</div>
+                    </div>
+                    <div class="bg-white p-3 rounded-lg text-center">
+                        <div class="text-2xl font-bold text-teal-600">${efficiency.retention}%</div>
+                        <div class="text-sm text-stone-600">记忆保持率</div>
+                    </div>
+                </div>
+                <div class="mt-4 p-3 bg-white rounded-lg">
+                    <div class="text-sm text-stone-700">${efficiency.analysis}</div>
+                </div>
+            `;
+        }
+        
+        function renderLearningPredictions() {
+            const container = document.getElementById('learning-predictions-display');
+            const predictions = generateLearningPredictions();
+            
+            container.innerHTML = `
+                <div class="space-y-3">
+                    <div class="bg-white p-3 rounded-lg">
+                        <div class="font-medium text-stone-800">完成所有短语预计时间</div>
+                        <div class="text-lg text-pink-600">${predictions.completionTime}</div>
+                    </div>
+                    <div class="bg-white p-3 rounded-lg">
+                        <div class="font-medium text-stone-800">建议下周学习重点</div>
+                        <div class="text-sm text-stone-600">${predictions.nextWeekFocus}</div>
+                    </div>
+                    <div class="bg-white p-3 rounded-lg">
+                        <div class="font-medium text-stone-800">学习趋势</div>
+                        <div class="text-sm text-stone-600">${predictions.trend}</div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function analyzeLearningPatterns() {
+            const history = userStats.learningHistory;
+            if (history.length === 0) {
+                return {
+                    bestTimeOfDay: null,
+                    averageSessionLength: 0,
+                    strongestCategory: null,
+                    learningStreak: userStats.consecutiveDays
+                };
+            }
+            
+            // 分析最佳学习时间
+            const timeStats = {};
+            history.forEach(entry => {
+                const hour = new Date(entry.date).getHours();
+                const timeSlot = hour < 12 ? '上午' : hour < 18 ? '下午' : '晚上';
+                timeStats[timeSlot] = (timeStats[timeSlot] || 0) + 1;
+            });
+            
+            const bestTimeOfDay = Object.keys(timeStats).reduce((a, b) => 
+                timeStats[a] > timeStats[b] ? a : b, null);
+            
+            return {
+                bestTimeOfDay,
+                averageSessionLength: Math.round(userStats.totalStudyTime / Math.max(1, userStats.consecutiveDays)),
+                strongestCategory: findStrongestCategory(),
+                learningStreak: userStats.consecutiveDays
+            };
+        }
+        
+        function findStrongestCategory() {
+            const categoryStats = {};
+            phrasesData.forEach(category => {
+                let learned = 0;
+                category.phrases.forEach(phrase => {
+                    if (learnedPhrases[`GLOBAL_${phrase.en}`]) learned++;
+                });
+                categoryStats[category.category] = learned / category.phrases.length;
+            });
+            
+            return Object.keys(categoryStats).reduce((a, b) => 
+                categoryStats[a] > categoryStats[b] ? a : b, null);
+        }
+        
+        function generatePersonalizedSuggestions() {
+            const suggestions = [];
+            const accuracy = userStats.averageAccuracy;
+            const streak = userStats.consecutiveDays;
+            
+            if (accuracy < 0.7) {
+                suggestions.push({
+                    title: '放慢学习节奏',
+                    description: '建议减少每日学习量，多花时间复习已学内容'
+                });
+            }
+            
+            if (streak < 3) {
+                suggestions.push({
+                    title: '建立学习习惯',
+                    description: '尝试每天固定时间学习，培养持续学习的习惯'
+                });
+            }
+            
+            if (userStats.totalLearned > 50) {
+                suggestions.push({
+                    title: '尝试新的学习方式',
+                    description: '可以尝试抽认卡模式或设定更具挑战性的目标'
+                });
+            }
+            
+            return suggestions.length > 0 ? suggestions : [{
+                title: '继续保持',
+                description: '您的学习状态很好，继续保持当前的学习节奏'
+            }];
+        }
+        
+        function analyzeEfficiency() {
+            const history = userStats.learningHistory.slice(-20);
+            if (history.length === 0) {
+                return {
+                    accuracy: 0,
+                    speed: 0,
+                    retention: 0,
+                    analysis: '暂无足够数据进行分析'
+                };
+            }
+            
+            const accuracy = Math.round((history.filter(h => h.result === 'correct').length / history.length) * 100);
+            const speed = Math.round(history.reduce((sum, h) => sum + (h.responseTime || 3), 0) / history.length * 10) / 10;
+            const retention = Math.round(calculateRetentionRate() * 100);
+            
+            let analysis = '';
+            if (accuracy > 85) {
+                analysis = '学习准确率很高，可以适当增加学习难度或数量。';
+            } else if (accuracy < 70) {
+                analysis = '建议放慢学习节奏，多花时间在复习和巩固上。';
+            } else {
+                analysis = '学习状态良好，保持当前节奏继续学习。';
+            }
+            
+            return { accuracy, speed, retention, analysis };
+        }
+        
+        function calculateRetentionRate() {
+            const learnedData = Object.values(enhancedLearningData).filter(data => data.learned);
+            if (learnedData.length === 0) return 0;
+            
+            return learnedData.reduce((sum, data) => sum + data.masteryLevel, 0) / learnedData.length;
+        }
+        
+        function generateLearningPredictions() {
+            const remainingPhrases = allFlattenedPhrases.length - userStats.totalLearned;
+            const dailyRate = userStats.dailyTarget;
+            const daysToComplete = Math.ceil(remainingPhrases / dailyRate);
+            
+            const completionDate = new Date();
+            completionDate.setDate(completionDate.getDate() + daysToComplete);
+            
+            return {
+                completionTime: `约${daysToComplete}天 (${completionDate.toLocaleDateString()})`,
+                nextWeekFocus: getNextWeekFocus(),
+                trend: getTrendAnalysis()
+            };
+        }
+        
+        function getNextWeekFocus() {
+            const weakestCategory = findWeakestCategory();
+            return weakestCategory ? `重点学习"${weakestCategory}"分类` : '继续按计划学习';
+        }
+        
+        function findWeakestCategory() {
+            const categoryStats = {};
+            phrasesData.forEach(category => {
+                let learned = 0;
+                category.phrases.forEach(phrase => {
+                    if (learnedPhrases[`GLOBAL_${phrase.en}`]) learned++;
+                });
+                categoryStats[category.category] = learned / category.phrases.length;
+            });
+            
+            return Object.keys(categoryStats).reduce((a, b) => 
+                categoryStats[a] < categoryStats[b] ? a : b, null);
+        }
+        
+        function getTrendAnalysis() {
+            if (userStats.consecutiveDays > 7) {
+                return '学习趋势良好，保持稳定的学习节奏';
+            } else if (userStats.consecutiveDays > 3) {
+                return '学习习惯正在形成，继续坚持';
+            } else {
+                return '建议建立更稳定的学习习惯';
+            }
+        }
+
+        function switchLearningHubTab(tabName) {
+            currentLearningHubTab = tabName;
+
+            // 隐藏所有内容
+            learningPlanContent.classList.add('hidden');
+            reviewPlanContent.classList.add('hidden');
+            myProgressContent.classList.add('hidden');
+            learningGoalsContent.classList.add('hidden');
+            learningInsightsContent.classList.add('hidden');
+
+            // 移除所有活动状态
+            learningPlanTabButton.classList.remove('active');
+            reviewPlanTabButton.classList.remove('active');
+            myProgressTabButton.classList.remove('active');
+            learningGoalsTabButton.classList.remove('active');
+            learningInsightsTabButton.classList.remove('active');
+
+            switch (currentLearningHubTab) {
+                case 'learning-plan':
+                    learningPlanContent.classList.remove('hidden');
+                    learningPlanTabButton.classList.add('active');
+                    renderLearningPlan();
+                    updateTodayStats();
+                    break;
+                case 'review-plan':
+                    reviewPlanContent.classList.remove('hidden');
+                    reviewPlanTabButton.classList.add('active');
+                    generateUnlearnedPhrasesForReview();
+                    currentReviewSetIndex = 0;
+                    renderReviewPlan();
+                    break;
+                case 'my-progress':
+                    myProgressContent.classList.remove('hidden');
+                    myProgressTabButton.classList.add('active');
+                    updateMyProgress();
+                    break;
+                case 'learning-goals':
+                    learningGoalsContent.classList.remove('hidden');
+                    learningGoalsTabButton.classList.add('active');
+                    renderLearningGoals();
+                    break;
+                case 'learning-insights':
+                    learningInsightsContent.classList.remove('hidden');
+                    learningInsightsTabButton.classList.add('active');
+                    renderLearningInsights();
+                    break;
+            }
+        }
+
+        function switchMode(mode) {
+            const previousMode = currentMode;
+            currentMode = mode;
+
+            // 添加淡出动画
+            const containers = [phrasesContainer, flashcardContainer, learningHubContainer, categoryButtonsContainer];
+            containers.forEach(container => {
+                if (!container.classList.contains('hidden')) {
+                    container.style.opacity = '0';
+                    container.style.transform = 'translateY(20px)';
+                }
+            });
+
+            setTimeout(() => {
+                phrasesContainer.classList.add('hidden');
+                flashcardContainer.classList.add('hidden');
+                learningHubContainer.classList.add('hidden');
+                categoryButtonsContainer.classList.add('hidden');
+
+                categoryIntro.textContent = '';
+                updateMainNavigationButtons();
+
+                // 重置样式
+                containers.forEach(container => {
+                    container.style.opacity = '';
+                    container.style.transform = '';
+                });
+
+                switch (currentMode) {
+                    case 'category-browse':
+                        phrasesContainer.classList.remove('hidden');
+                        categoryButtonsContainer.classList.remove('hidden');
+                        phrasesContainer.classList.add('fade-in');
+                        categoryButtonsContainer.classList.add('slide-in-left');
+                        renderPhrases();
+                        updateActiveCategoryButton();
+                        break;
+                    case 'flashcard':
+                        flashcardContainer.classList.remove('hidden');
+                        flashcardContainer.classList.add('slide-in-right');
+                        loadFlashcardSet();
+                        renderFlashcard();
+                        break;
+                    case 'learning-hub':
+                        learningHubContainer.classList.remove('hidden');
+                        learningHubContainer.classList.add('fade-in');
+                        switchLearningHubTab(currentLearningHubTab);
+                        break;
+                }
+
+                // 清除动画类
+                setTimeout(() => {
+                    containers.forEach(container => {
+                        container.classList.remove('fade-in', 'slide-in-left', 'slide-in-right');
+                    });
+                }, 500);
+            }, 200);
+        }
+
+        function initApp() {
+            loadLearnedPhrases();
+            initLearningPlan();
+            renderCategoryButtons();
+            setupLearningModeSelection();
+            switchMode('category-browse');
+            
+            // 设置新功能的事件监听器
+            document.getElementById('auto-plan-button').addEventListener('click', generateSmartPlan);
+            document.getElementById('add-goal-button').addEventListener('click', addNewGoal);
+            
+            // 初始化学习模式
+            const savedMode = userStats.learningMode || 'normal';
+            document.querySelector(`input[value="${savedMode}"]`).checked = true;
+            updateDailyTargetByMode();
+        }
+
+
+        // Event Listeners for Main Navigation
+        categoryBrowseButton.addEventListener('click', () => {
+            switchMode('category-browse');
+        });
+
+        learningHubButton.addEventListener('click', () => {
+            switchMode('learning-hub');
+        });
+
+        flashcardModeButton.addEventListener('click', () => {
+            switchMode('flashcard');
+        });
+
+        // Event Listeners for Learning Hub Sub-navigation
+        learningPlanTabButton.addEventListener('click', () => switchLearningHubTab('learning-plan'));
+        reviewPlanTabButton.addEventListener('click', () => switchLearningHubTab('review-plan'));
+        myProgressTabButton.addEventListener('click', () => switchLearningHubTab('my-progress'));
+        learningGoalsTabButton.addEventListener('click', () => switchLearningHubTab('learning-goals'));
+        learningInsightsTabButton.addEventListener('click', () => switchLearningHubTab('learning-insights'));
+
+
+        // Event Listeners for Learning Plan content
+        phrasesPerDayInput.addEventListener('change', (event) => {
+            let newPhrasesPerDay = parseInt(event.target.value);
+            if (isNaN(newPhrasesPerDay) || newPhrasesPerDay < 1) {
+                newPhrasesPerDay = 1;
+            } else if (newPhrasesPerDay > 15) {
+                newPhrasesPerDay = 15;
+            }
+            phrasesPerDayInput.value = newPhrasesPerDay;
+            phrasesPerDay = newPhrasesPerDay;
+            currentLearningDay = 0;
+            renderLearningPlan();
+        });
+
+        prevDayButton.addEventListener('click', () => {
+            if (currentLearningDay > 0) {
+                currentLearningDay--;
+                renderLearningPlan();
+            }
+        });
+
+        nextDayButton.addEventListener('click', () => {
+            const totalDays = Math.ceil(allFlattenedPhrases.length / phrasesPerDay);
+            if (currentLearningDay < totalDays - 1) {
+                currentLearningDay++;
+                renderLearningPlan();
+            }
+        });
+
+        // Event Listeners for Review Plan content
+        refreshReviewButton.addEventListener('click', () => {
+            generateUnlearnedPhrasesForReview();
+            currentReviewSetIndex = 0;
+            renderReviewPlan();
+        });
+        
+        // Event Listeners for Flashcard Mode
+        flashcardSourceRadios.forEach(radio => {
+            radio.addEventListener('change', () => {
+                loadFlashcardSet();
+                renderFlashcard();
+            });
+        });
+
+        shuffleFlashcardsButton.addEventListener('click', () => {
+            loadFlashcardSet(); // Re-load and re-shuffle
+            renderFlashcard();
+        });
+
+        // Simplified Flashcard Navigation and Mark Learned
+        prevFlashcardButton.addEventListener('click', () => showPrevFlashcard());
+        nextFlashcardButton.addEventListener('click', () => showNextFlashcard());
+        markLearnedFlashcardButton.addEventListener('click', () => {
+            if (flashcardSet.length === 0) return;
+            const currentPhrase = flashcardSet[currentFlashcardIndex];
+            const phraseKey = `GLOBAL_${currentPhrase.en}`;
+            if (learnedPhrases[phraseKey]) {
+                delete learnedPhrases[phraseKey]; // Unmark
+            } else {
+                learnedPhrases[phraseKey] = true; // Mark
+            }
+            saveLearnedPhrases();
+            updateMarkLearnedFlashcardButtonState(); // Update button text immediately
+        });
+
+        // 移动端手势支持
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let touchEndX = 0;
+        let touchEndY = 0;
+
+        function handleTouchStart(e) {
+            touchStartX = e.changedTouches[0].screenX;
+            touchStartY = e.changedTouches[0].screenY;
+        }
+
+        function handleTouchEnd(e) {
+            touchEndX = e.changedTouches[0].screenX;
+            touchEndY = e.changedTouches[0].screenY;
+            handleSwipe();
+        }
+
+        function handleSwipe() {
+            const deltaX = touchEndX - touchStartX;
+            const deltaY = touchEndY - touchStartY;
+            const minSwipeDistance = 50;
+
+            // 确保水平滑动距离大于垂直滑动距离
+            if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > minSwipeDistance) {
+                if (currentMode === 'flashcard' && flashcardSet.length > 0) {
+                    if (deltaX > 0) {
+                        // 向右滑动 - 上一张
+                        showPrevFlashcard();
+                    } else {
+                        // 向左滑动 - 下一张
+                        showNextFlashcard();
+                    }
+                }
+            }
+        }
+
+        // 添加触摸事件监听器
+        document.addEventListener('touchstart', handleTouchStart, { passive: true });
+        document.addEventListener('touchend', handleTouchEnd, { passive: true });
+
+        // 防止移动端双击缩放
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function (event) {
+            const now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+
+        // 添加加载动画
+        function showLoadingSpinner(container) {
+            container.innerHTML = '<div class="flex justify-center items-center py-20"><div class="loading-spinner"></div></div>';
+        }
+
+        // 添加成功提示
+        function showSuccessMessage(message, duration = 2000) {
+            const toast = document.createElement('div');
+            toast.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 transform translate-x-full transition-transform duration-300';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.remove('translate-x-full');
+            }, 100);
+
+            setTimeout(() => {
+                toast.classList.add('translate-x-full');
+                setTimeout(() => {
+                    document.body.removeChild(toast);
+                }, 300);
+            }, duration);
+        }
+
+        // 添加错误提示
+        function showErrorMessage(message, duration = 3000) {
+            const toast = document.createElement('div');
+            toast.className = 'fixed top-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 transform translate-x-full transition-transform duration-300';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.remove('translate-x-full');
+            }, 100);
+
+            setTimeout(() => {
+                toast.classList.add('translate-x-full');
+                setTimeout(() => {
+                    document.body.removeChild(toast);
+                }, 300);
+            }, duration);
+        }
+
+        // 优化语音播放错误处理
+        window.addEventListener('error', (e) => {
+            if (e.message.includes('speech')) {
+                showErrorMessage('语音播放失败，请检查设备音量设置');
+            }
+        });
+
+        // 添加页面可见性检测，暂停不必要的动画
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                // 页面隐藏时停止语音
+                if ('speechSynthesis' in window) {
+                    speechSynthesis.cancel();
+                }
+            }
+        });
+
+        // 添加键盘快捷键支持
+        document.addEventListener('keydown', (e) => {
+            if (currentMode === 'flashcard' && flashcardSet.length > 0) {
+                switch (e.key) {
+                    case 'ArrowLeft':
+                        e.preventDefault();
+                        showPrevFlashcard();
+                        break;
+                    case 'ArrowRight':
+                        e.preventDefault();
+                        showNextFlashcard();
+                        break;
+                    case ' ':
+                        e.preventDefault();
+                        const flashcard = document.querySelector('.flashcard');
+                        if (flashcard) {
+                            flashcard.click();
+                        }
+                        break;
+                    case 'Enter':
+                        e.preventDefault();
+                        const markButton = document.querySelector('#mark-learned-flashcard-button');
+                        if (markButton) {
+                            markButton.click();
+                        }
+                        break;
+                }
+            }
+        });
+
+        // Initialize the app
+        initApp();
+
+    </script>
+</body>
+</html>

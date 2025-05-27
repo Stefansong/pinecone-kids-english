@@ -1,0 +1,23 @@
+{
+  "name": "pinecone-kids-english",
+  "version": "1.0.0",
+  "description": "松果幼儿英语口语300句 - 互动学习应用",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx serve .",
+    "build": "echo 'No build step required for static site'",
+    "start": "npx serve ."
+  },
+  "keywords": [
+    "english",
+    "learning",
+    "kids",
+    "education",
+    "interactive"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.2.1"
+  }
+} 
